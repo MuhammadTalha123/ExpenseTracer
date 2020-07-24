@@ -19,4 +19,7 @@
     <item name="logOut" type="id" />
     <item name="cancelBtn" type="id" />
     <item name="closeBtn" type="id" />
+    <item name="passwordField" type="id" />
+    <item name="emailField" type="id" />
+    <item name="loginBtn" type="id" />
 </resources>

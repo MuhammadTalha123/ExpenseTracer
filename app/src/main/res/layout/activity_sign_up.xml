@@ -5,6 +5,7 @@
     android:id="@+id/activity_sign_up"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroun_color"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -13,6 +14,7 @@
 
     <TextView
         android:text="@string/signUp_fullName"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -21,6 +23,11 @@
         android:id="@+id/textView3" />
 
     <EditText
+        android:background="@drawable/edittext_background"
+        android:padding="15dp"
+        android:textColor="@android:color/white"
+        android:hint="Full Name"
+        android:textColorHint="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -33,6 +40,7 @@
 
     <TextView
         android:text="@string/signUp_email"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fullNameField"
@@ -42,6 +50,11 @@
         android:id="@+id/textView4" />
 
     <EditText
+        android:background="@drawable/edittext_background"
+        android:padding="15dp"
+        android:textColor="@android:color/white"
+        android:hint="Email"
+        android:textColorHint="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -54,6 +67,7 @@
 
     <TextView
         android:text="@string/signUp_password"
+        android:textColor="@android:color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/emailField"
@@ -63,6 +77,11 @@
         android:id="@+id/textView5" />
 
     <EditText
+        android:background="@drawable/edittext_background"
+        android:padding="15dp"
+        android:textColor="@android:color/white"
+        android:hint="Password"
+        android:textColorHint="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -78,6 +97,8 @@
         android:text="@string/signUp_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@drawable/edittext_background"
         android:layout_below="@+id/signUpBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
@@ -87,6 +108,8 @@
         android:text="@string/signUp_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@drawable/edittext_background"
         android:layout_marginTop="10dp"
         android:id="@+id/signUpBtn"
         android:layout_below="@+id/passwordField"
