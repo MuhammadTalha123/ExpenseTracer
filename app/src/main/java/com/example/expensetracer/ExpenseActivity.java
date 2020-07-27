@@ -1,7 +1,9 @@
 package com.example.expensetracer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -91,9 +93,9 @@ public class ExpenseActivity extends AppCompatActivity {
     }
 
     public void loadAllViews() {
-        expList = (ListView) findViewById(R.id.expensesListView);
-        addExp = (ImageView) findViewById(R.id.addExpenseButton);
-        expHint = (LinearLayout) findViewById(R.id.addExpenseBody);
+        expList = findViewById(R.id.expensesListView);
+        addExp = findViewById(R.id.addExpenseButton);
+        expHint = findViewById(R.id.addExpenseBody);
         addExp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,12 +105,32 @@ public class ExpenseActivity extends AppCompatActivity {
         });
         expList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Expense exp = expenses.get(position);
-                expensesRef.child(exp.getId()).removeValue();
-                Toast.makeText(ExpenseActivity.this,"Expense Deleted", Toast.LENGTH_LONG).show();
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                final AlertDialog.Builder delExp = new AlertDialog.Builder(ExpenseActivity.this);
+                delExp.setTitle("Expense Deleting");
+                delExp.setMessage("You Will Loss Your Expense Detail...");
+                delExp.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Expense exp = expenses.get(position);
+                        expensesRef.child(exp.getId()).removeValue();
+                        Toast.makeText(ExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+                delExp.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+
+                delExp.show();
                 return true;
             }
+
         });
         expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

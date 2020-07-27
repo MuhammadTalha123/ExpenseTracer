@@ -4,6 +4,7 @@
     android:id="@+id/activity_view_expense"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroun_color"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
         android:layout_marginTop="15dp"
         android:id="@+id/textView5"
         android:textStyle="bold"
@@ -27,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView5"
         android:layout_toLeftOf="@+id/textView5"
+        android:textColor="@android:color/white"
         android:layout_toStartOf="@+id/textView5"
         android:layout_marginRight="36dp"
         android:layout_marginEnd="36dp"
@@ -38,6 +41,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_alignTop="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6"
@@ -50,6 +54,7 @@
         android:text="@string/detail_Category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/textView6"
         android:layout_alignLeft="@+id/textView6"
         android:layout_alignStart="@+id/textView6"
@@ -61,6 +66,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_alignTop="@+id/textView8"
         android:layout_alignRight="@+id/dt_name"
         android:layout_alignEnd="@+id/dt_name"
@@ -73,6 +79,7 @@
         android:text="@string/detail_Amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/textView8"
         android:layout_alignLeft="@+id/textView8"
         android:layout_alignStart="@+id/textView8"
@@ -86,6 +93,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_alignTop="@+id/textView10"
         android:layout_alignLeft="@+id/dt_category"
         android:layout_alignStart="@+id/dt_category"
@@ -98,6 +106,7 @@
         android:text="@string/detail_Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/textView10"
         android:layout_alignRight="@+id/textView10"
         android:layout_alignEnd="@+id/textView10"
@@ -111,6 +120,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:layout_alignTop="@+id/textView12"
         android:layout_alignRight="@+id/dt_amount"
         android:layout_alignEnd="@+id/dt_amount"
@@ -121,11 +131,15 @@
 
     <Button
         android:text="@string/detail_Close"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:background="@drawable/edittext_background"
         android:layout_below="@+id/dt_date"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="56dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
         android:id="@+id/closeBtn" />
 
 </RelativeLayout>

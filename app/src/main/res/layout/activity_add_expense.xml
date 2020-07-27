@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/backgroun_color"
     tools:context=".AddExpenseActivity">
 
     <TextView
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
         android:layout_marginTop="15dp"
         android:id="@+id/textView"
         android:textSize="24sp"
@@ -29,6 +31,7 @@
         android:layout_marginTop="18dp"
         android:id="@+id/textView2"
         android:textStyle="bold"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -42,6 +45,7 @@
         android:layout_below="@+id/editName"
         android:layout_marginTop="7dp"
         android:id="@+id/textView3"
+        android:textColor="@android:color/white"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="15dp"
@@ -55,6 +59,7 @@
         android:layout_below="@+id/textView3"
         android:layout_marginTop="7dp"
         android:id="@+id/editCategory"
+        android:textColor="@android:color/white"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp" />
 
@@ -63,6 +68,11 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
+        android:background="@drawable/edittext_background"
+        android:padding="10dp"
+        android:hint="Enter Expense Name..."
+        android:textColorHint="@android:color/white"
+        android:textColor="@android:color/white"
         android:layout_marginTop="5dp"
         android:id="@+id/editName"
         android:layout_below="@+id/textView2"
@@ -81,6 +91,7 @@
         android:layout_below="@+id/editCategory"
         android:layout_marginTop="7dp"
         android:id="@+id/textView4"
+        android:textColor="@android:color/white"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="15dp"
@@ -93,8 +104,13 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
+        android:background="@drawable/edittext_background"
+        android:padding="10dp"
+        android:hint="Enter Your Amount..."
+        android:textColorHint="@android:color/white"
         android:layout_below="@+id/textView4"
         android:layout_marginTop="5dp"
+        android:textColor="@android:color/white"
         android:id="@+id/editAmount"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -113,27 +129,33 @@
         android:layout_weight="2">
 
         <Button
-            android:text="@string/add_SubmitButton"
+            android:id="@+id/addBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/addBtn"
-            android:layout_alignLeft="@+id/editAmount"
             android:layout_alignStart="@+id/editAmount"
-            android:layout_weight="1"
+            android:layout_alignLeft="@+id/editAmount"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_background"
+            android:text="@string/add_SubmitButton"
+            android:textColor="@android:color/white" />
 
         <Button
-            android:text="@string/add_CancelButton"
+            android:id="@+id/cancelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/addBtn"
-            android:layout_toRightOf="@+id/textView"
-            android:layout_toEndOf="@+id/textView"
-            android:id="@+id/cancelBtn"
-            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="30dp"
-            android:layout_marginLeft="15dp" />
+            android:layout_toEndOf="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_weight="1"
+            android:background="@drawable/edittext_background"
+            android:text="@string/add_CancelButton"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>
