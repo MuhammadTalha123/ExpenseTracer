@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +34,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         getSupportActionBar().setTitle(R.string.app_name_signUp);
         loadAllViews();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            }
+        });
 
     }
 
@@ -64,10 +72,29 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Log.d("test", "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+
+
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this, R.string.toast_signup_error, Toast.LENGTH_LONG).show();
                                 } else {
                                     FirebaseUser fUser = mAuth.getCurrentUser();
+                                    fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(SignUpActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("TAG", "onFailure: Email not Sent " + e.getMessage());
+                                        }
+                                    });
+
+
+
+
+
                                     if (fUser != null) {
                                         User user = new User();
                                         String useruid = fUser.getUid();

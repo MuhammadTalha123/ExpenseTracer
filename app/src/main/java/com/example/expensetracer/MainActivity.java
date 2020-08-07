@@ -1,8 +1,10 @@
 package com.example.expensetracer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -10,30 +12,37 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    TextView emailField, passwordField;
+    TextView emailField, passwordField, forgotTextLink;
     Button loginBtn, signBtn;
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        forgotTextLink = (TextView) findViewById(R.id.forgotTextLink);
+
+        mAuth = FirebaseAuth.getInstance();
+
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         if(ni.isConnected()) {
-            mAuth = FirebaseAuth.getInstance();
             if(mAuth.getCurrentUser() != null) {
                 Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                 startActivity(intent);
@@ -43,6 +52,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
         }
+
+
+
+
+
+
+        forgotTextLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText resetMail = new EditText(view.getContext());
+                final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(view.getContext());
+                passwordResetDialog.setTitle("Reset Password");
+                passwordResetDialog.setMessage("Enter your Email to Received Reset Password Link");
+                passwordResetDialog.setView(resetMail);
+
+                passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        String mail = resetMail.getText().toString();
+                        mAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(MainActivity.this, "Password Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, "Error ! Reset Link Is Not Sent " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                });
+
+                passwordResetDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                passwordResetDialog.create().show();
+
+            }
+        });
+
+
+
+
+
+
+
     }
 
     public void loadAllViews() {
@@ -52,36 +114,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginBtn.setOnClickListener(this);
         signBtn = (Button) findViewById(R.id.signUpBtn);
         signBtn.setOnClickListener(this);
+
+
     }
 
     @Override
     public void onClick(View v) {
 
-        if(v.getId() == R.id.loginBtn) {
-            String email = emailField.getText().toString();
-            String password = passwordField.getText().toString();
-            if(email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
-            } else {
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d("test", "signInWithEmail:onComplete:" + task.isSuccessful());
-                                if (!task.isSuccessful()) {
-                                    Log.w("test", "signInWithEmail:failed", task.getException());
-                                    Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
-                                } else {
-                                    Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                                    startActivity(intent);
+            if (v.getId() == R.id.loginBtn) {
+                String email = emailField.getText().toString();
+                String password = passwordField.getText().toString();
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
+                } else {
+                    mAuth.signInWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    Log.d("test", "signInWithEmail:onComplete:" + task.isSuccessful());
+                                    if (!task.isSuccessful()) {
+                                        Log.w("test", "signInWithEmail:failed", task.getException());
+                                        Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                                        startActivity(intent);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
+            } else if (v.getId() == R.id.signUpBtn) {
+                Intent intent = new Intent(this, SignUpActivity.class);
+                startActivity(intent);
             }
-        } else if (v.getId() == R.id.signUpBtn) {
-            Intent intent = new Intent(this,SignUpActivity.class);
-            startActivity(intent);
+
         }
 
-    }
 }

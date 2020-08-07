@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +48,19 @@ public class ExpenseActivity extends AppCompatActivity {
         loadAllViews();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (!user.isEmailVerified()) {
+
+            expList.setVisibility(View.GONE);
+            startActivity(new Intent(getApplicationContext(),VerifyActivity.class));
+
+        } else {
+
+            expList.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     @Override

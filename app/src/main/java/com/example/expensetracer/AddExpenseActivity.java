@@ -1,7 +1,9 @@
 package com.example.expensetracer;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +26,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
 
     TextView expNameField,expAmountField;
     Spinner expCategoryField;
-    Button addBtn, cancelBtn;
+    Button addBtn, cancelBtn,drawBtn;
     int catValue = -1;
     DatabaseReference ref;
     DatabaseReference expensesRef;
@@ -33,6 +36,20 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+
+        drawBtn = (Button) findViewById(R.id.drawing_view);
+
+
+        drawBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
+            }
+        });
+
+
+
+
 
         ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -60,8 +77,8 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
 
     public void loadAllViews() {
         expNameField = (TextView) findViewById(R.id.editName);
-        expCategoryField = (Spinner) findViewById(R.id.editCategory);
         expAmountField = (TextView) findViewById(R.id.editAmount);
+        expCategoryField = (Spinner) findViewById(R.id.editCategory);
         addBtn = (Button) findViewById(R.id.addBtn);
         addBtn.setOnClickListener(this);
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
