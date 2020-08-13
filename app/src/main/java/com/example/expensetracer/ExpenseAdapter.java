@@ -42,7 +42,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         }
         Expense exp = mObjects.get(position);
         holder.nameText.setText(exp.getName());
-        holder.amountText.setText("$" + String.valueOf(df.format(exp.getAmount())));
+        holder.amountText.setText(String.valueOf(df.format(exp.getAmount())));
         return convertView;
     }
 }

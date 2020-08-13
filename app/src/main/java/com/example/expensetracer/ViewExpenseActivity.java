@@ -3,15 +3,21 @@ package com.example.expensetracer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 
@@ -23,6 +29,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_amount;
     TextView det_date;
     Button closeBtn;
+    Button drawBtn;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
 
@@ -30,10 +37,25 @@ public class ViewExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
+        drawBtn = findViewById(R.id.draw_btn);
 
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
         loadAllViews();
+
+
+
+
+        drawBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -68,7 +90,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
             det_date = (TextView) findViewById(R.id.dt_date);
             det_name.setText(expense.getName());
             det_cat.setText(ExpenseActivity.categories[expense.getCategory()]);
-            det_amount.setText("$" + df.format(expense.getAmount()));
+            det_amount.setText(df.format(expense.getAmount()));
             det_date.setText(expense.getcDate());
         }
     }

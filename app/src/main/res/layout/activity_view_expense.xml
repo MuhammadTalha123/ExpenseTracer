@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_expense"
     android:layout_width="match_parent"
@@ -129,17 +130,32 @@
         android:layout_alignStart="@+id/dt_amount"
         android:textSize="20sp" />
 
+
     <Button
-        android:text="@string/detail_Close"
+        android:id="@+id/closeBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:background="@drawable/edittext_background"
         android:layout_below="@+id/dt_date"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/edittext_background"
+        android:text="@string/detail_Close"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/draw_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="56dp"
         android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:id="@+id/closeBtn" />
+        android:layout_marginBottom="290dp"
+        android:background="@drawable/edittext_background"
+        android:text="Draw"
+        android:textColor="@android:color/white" />
+
 
 </RelativeLayout>

@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -31,6 +33,8 @@ public class PaintingActivity extends AppCompatActivity {
     StorageReference storageReference;
     FirebaseAuth mAuth;
     String uid;
+    DatabaseReference ref;
+    DatabaseReference expensesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +47,11 @@ public class PaintingActivity extends AppCompatActivity {
         saveImageBtn = findViewById(R.id.saveimage_btn);
         drawingView = findViewById(R.id.myDrawing);
         mAuth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference();
         uid = mAuth.getCurrentUser().getUid();
+        expensesRef = ref.child("users").child("expenses").child(uid);
         FirebaseUser user = mAuth.getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference().child("users/images"+user+"drawing.png");
+        storageReference = FirebaseStorage.getInstance().getReference().child("users/"+user+"/"+expensesRef+"drawing.png");
 
 
 
