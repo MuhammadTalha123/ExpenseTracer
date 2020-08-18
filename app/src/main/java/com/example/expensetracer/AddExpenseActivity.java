@@ -26,7 +26,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
 
     TextView expNameField,expAmountField;
     Spinner expCategoryField;
-    Button addBtn, cancelBtn,drawBtn;
+    Button addBtn, cancelBtn;
     int catValue = -1;
     DatabaseReference ref;
     DatabaseReference expensesRef;
@@ -36,19 +36,6 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
-
-        drawBtn = (Button) findViewById(R.id.drawing_view);
-
-
-        drawBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
-            }
-        });
-
-
-
 
 
         ref = FirebaseDatabase.getInstance().getReference();

@@ -1,10 +1,14 @@
 package com.example.expensetracer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,24 +16,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.util.UUID;
 
 public class ViewExpenseActivity extends AppCompatActivity {
 
     Expense expense;
+    ImageView imageView;
     TextView det_name;
     TextView det_cat;
     TextView det_amount;
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
+    StorageReference storageReference;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
 
@@ -37,21 +51,38 @@ public class ViewExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
-        drawBtn = findViewById(R.id.draw_btn);
 
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
         loadAllViews();
 
+        imageView = findViewById(R.id.imageView);
+        storageReference = FirebaseStorage.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
+
+//        final StorageReference fileRef = storageReference.child(mAuth.getCurrentUser().getUid());
 
 
 
-        drawBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
-            }
-        });
+
+
+
+//        String imgSaved = new String();
+//        final StorageReference fileRef = storageReference.child(imgSaved+ UUID.randomUUID().toString());
+//        fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        Picasso.get().load(uri).into(imageView);
+//                    }
+//                });
+
+//            }
+//        });
+
+
 
 
 
@@ -81,6 +112,15 @@ public class ViewExpenseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        drawBtn = findViewById(R.id.draw_btn);
+
+        drawBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
             }
         });
         if(expense != null) {

@@ -157,17 +157,6 @@
             android:text="@string/add_CancelButton"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/drawing_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edittext_background"
-            android:layout_weight="1"
-            android:layout_marginRight="15dp"
-            android:textColor="@android:color/white"
-            android:text="Draw
-" />
     </LinearLayout>
 
 </RelativeLayout>
