@@ -109,12 +109,15 @@ public class PaintingActivity extends AppCompatActivity {
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
 
-                                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-                                String imageUri = downloadUrl.toString();
+//                                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+//                                String imageUri = downloadUrl.toString();
+//
+////                                expensesRef.push().getRoot().getParent().child("expenses", "imageUri");
+//                               expensesRef.child("imagesUrl").child("imageUri").setValue(imageUri);
+//                                Toast.makeText(PaintingActivity.this, imageUri, Toast.LENGTH_SHORT).show();
 
-//                                expensesRef.push().getRoot().getParent().child("expenses", "imageUri");
-                               expensesRef.child("imagesUrl").child("imageUri").setValue(imageUri);
-                                Toast.makeText(PaintingActivity.this, imageUri, Toast.LENGTH_SHORT).show();
+                                fileRef.getDownloadUrl().toString();
+                                
 
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
