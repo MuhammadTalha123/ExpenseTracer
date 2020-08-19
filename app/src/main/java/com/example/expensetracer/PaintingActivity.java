@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,17 +24,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.UUID;
 
 public class PaintingActivity extends AppCompatActivity {
 
 
     DrawingView drawingView;
-    Button cnlBtn,saveImageBtn;
+    Button saveImageBtn;
     StorageReference storageReference;
+    ImageView imageView;
     FirebaseAuth mAuth;
-    String uid;
     DatabaseReference ref;
     DatabaseReference expensesRef;
 
@@ -41,26 +45,23 @@ public class PaintingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_painting);
 
-
-
-        cnlBtn = findViewById(R.id.cancel_btn);
+        ref = FirebaseDatabase.getInstance().getReference();
+        imageView = findViewById(R.id.imageView);
         saveImageBtn = findViewById(R.id.saveimage_btn);
         drawingView = findViewById(R.id.myDrawing);
         mAuth = FirebaseAuth.getInstance();
-        ref = FirebaseDatabase.getInstance().getReference();
-        uid = mAuth.getCurrentUser().getUid();
-        expensesRef = ref.child("users").child("expenses").child(uid);
-        FirebaseUser user = mAuth.getCurrentUser();
-        storageReference = FirebaseStorage.getInstance().getReference().child("users/"+user+"/"+expensesRef+"drawing.png");
+        final FirebaseUser user = mAuth.getCurrentUser();
+        final String uid = mAuth.getCurrentUser().getUid();
+        expensesRef = ref.child("users").child(uid).child("expenses");
+        storageReference = FirebaseStorage.getInstance().getReference().child(user.getUid());
+
+        showImage();
 
 
 
-        cnlBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),AddExpenseActivity.class));
-            }
-        });
+
+
+
 
 
 
@@ -68,7 +69,7 @@ public class PaintingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder saveDialog = new AlertDialog.Builder(PaintingActivity.this);
+                final AlertDialog.Builder saveDialog = new AlertDialog.Builder(PaintingActivity.this);
                 saveDialog.setTitle("Save drawing");
                 saveDialog.setMessage("Save drawing to device Gallery?And Also Upload On FireStorage?");
                 saveDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
@@ -83,7 +84,7 @@ public class PaintingActivity extends AppCompatActivity {
 
                         if(imgSaved!=null){
                             Toast savedToast = Toast.makeText(getApplicationContext(),
-                                    "Drawing saved to Gallery,And Also Upload On FireStorage!", Toast.LENGTH_SHORT);
+                                    "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
                             savedToast.show();
                         }
                         else{
@@ -102,11 +103,26 @@ public class PaintingActivity extends AppCompatActivity {
 
 
                         // upload image to firebase storage
-                        StorageReference fileRef = storageReference.child(imgSaved);
+                        final StorageReference fileRef = storageReference.child(user.getUid());
                         fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+
+                                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
+                                String imageUri = downloadUrl.toString();
+
+//                                expensesRef.push().getRoot().getParent().child("expenses", "imageUri");
+                               expensesRef.child("imagesUrl").child("imageUri").setValue(imageUri);
+                                Toast.makeText(PaintingActivity.this, imageUri, Toast.LENGTH_SHORT).show();
+
+                                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri).into(imageView);
+                        imageView.setImageURI(uri);
+                    }
+                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -114,6 +130,7 @@ public class PaintingActivity extends AppCompatActivity {
                                 Toast.makeText(PaintingActivity.this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
                             }
                         });
+
 
                     }
                 });
@@ -132,11 +149,28 @@ public class PaintingActivity extends AppCompatActivity {
 
 
 
+
+
+
     }
 
 
     public void clearCanvas(View v) {
         drawingView.clearCanvas();
+    }
+
+    public void showImage() {
+
+        final StorageReference fileRef = storageReference.child(mAuth.getCurrentUser().getUid());
+
+        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imageView);
+                imageView.setImageURI(uri);
+            }
+        });
+
     }
 
 

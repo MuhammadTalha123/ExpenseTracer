@@ -40,18 +40,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
 
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo ni = cm.getActiveNetworkInfo();
-        if(ni.isConnected()) {
-            if(mAuth.getCurrentUser() != null) {
-                Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                startActivity(intent);
-            }
-            loadAllViews();
-            FirebaseApp.initializeApp(this);
-        } else {
-            Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
-        }
+
+            ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo ni = cm.getActiveNetworkInfo();
+
+
+                if (ni.isConnected()) {
+                    if (mAuth.getCurrentUser() != null) {
+                        Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                        startActivity(intent);
+                    }
+                    loadAllViews();
+                    FirebaseApp.initializeApp(this);
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
+                }
+
+
+
 
 
 
