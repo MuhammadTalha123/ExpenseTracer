@@ -46,8 +46,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
-    DatabaseReference databaseReference;
-    StorageReference storageReference;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
 
@@ -61,27 +59,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
         loadAllViews();
 
         imageView = findViewById(R.id.imageView);
-        storageReference = FirebaseStorage.getInstance().getReference().child(mAuth.getCurrentUser().getUid());
-
-//        final StorageReference fileRef = storageReference.child(mAuth.getCurrentUser().getUid());
-
-
-//        String imgSaved = new String();
-//        final StorageReference fileRef = storageReference.child(imgSaved+ UUID.randomUUID().toString());
-//        fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        Picasso.get().load(uri).into(imageView);
-//                    }
-//                });
-
-//            }
-//        });
-
 
     }
 

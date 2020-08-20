@@ -25,7 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView emailField, passwordField, forgotTextLink;
     Button loginBtn, signBtn;
@@ -41,27 +41,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth = FirebaseAuth.getInstance();
 
 
-            ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
-            NetworkInfo ni = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
 
 
-                if (ni.isConnected()) {
-                    if (mAuth.getCurrentUser() != null) {
-                        Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                        startActivity(intent);
-                    }
-                    loadAllViews();
-                    FirebaseApp.initializeApp(this);
-                } else {
-                    Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
-                }
-
-
-
-
-
-
-
+        if (ni.isConnected()) {
+            if (mAuth.getCurrentUser() != null) {
+                Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                startActivity(intent);
+            }
+            loadAllViews();
+            FirebaseApp.initializeApp(this);
+        } else {
+            Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
+        }
 
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
@@ -106,11 +99,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-
-
-
-
-
     }
 
     public void loadAllViews() {
@@ -127,32 +115,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-            if (v.getId() == R.id.loginBtn) {
-                String email = emailField.getText().toString();
-                String password = passwordField.getText().toString();
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
-                } else {
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    Log.d("test", "signInWithEmail:onComplete:" + task.isSuccessful());
-                                    if (!task.isSuccessful()) {
-                                        Log.w("test", "signInWithEmail:failed", task.getException());
-                                        Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                                        startActivity(intent);
-                                    }
+        if (v.getId() == R.id.loginBtn) {
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
+            } else {
+                mAuth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Log.d("test", "signInWithEmail:onComplete:" + task.isSuccessful());
+                                if (!task.isSuccessful()) {
+                                    Log.w("test", "signInWithEmail:failed", task.getException());
+                                    Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
+                                } else {
+                                    Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                                    startActivity(intent);
                                 }
-                            });
-                }
-            } else if (v.getId() == R.id.signUpBtn) {
-                Intent intent = new Intent(this, SignUpActivity.class);
-                startActivity(intent);
+                            }
+                        });
             }
-
+        } else if (v.getId() == R.id.signUpBtn) {
+            Intent intent = new Intent(this, SignUpActivity.class);
+            startActivity(intent);
         }
+
+    }
 
 }

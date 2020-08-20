@@ -36,7 +36,7 @@ public class ExpenseActivity extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference expensesRef;
     FirebaseAuth mAuth;
-    final static String[] categories = {"Groceries","Invoice","Transportation","Shopping","Rent","Trips","Utilities","Other"};
+    final static String[] categories = {"Groceries", "Invoice", "Transportation", "Shopping", "Rent", "Trips", "Utilities", "Other"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class ExpenseActivity extends AppCompatActivity {
         if (!user.isEmailVerified()) {
 
             expList.setVisibility(View.GONE);
-            startActivity(new Intent(getApplicationContext(),VerifyActivity.class));
+            startActivity(new Intent(getApplicationContext(), VerifyActivity.class));
 
         } else {
 
@@ -66,12 +66,12 @@ public class ExpenseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu1,menu);
+        inflater.inflate(R.menu.menu1, menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.logOut) {
+        if (item.getItemId() == R.id.logOut) {
             mAuth.signOut();
             Intent intent = new Intent(ExpenseActivity.this, MainActivity.class);
             startActivity(intent);
@@ -83,7 +83,7 @@ public class ExpenseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         expensesRef = ref.child("users").child(uid).child("expenses");
-        if(expensesRef == null) {
+        if (expensesRef == null) {
             expHint.setVisibility(View.GONE);
             expList.setVisibility(View.VISIBLE);
         } else {
@@ -91,7 +91,7 @@ public class ExpenseActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     expenses.clear();
-                    for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         Expense exps = ds.getValue(Expense.class);
                         exps.setId(ds.getKey());
                         expenses.add(exps);
@@ -151,20 +151,20 @@ public class ExpenseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Expense exp = expenses.get(position);
                 Intent intent = new Intent(ExpenseActivity.this, ViewExpenseActivity.class);
-                intent.putExtra("expense",exp);
+                intent.putExtra("expense", exp);
                 startActivity(intent);
             }
         });
     }
 
     public void showExpenseTable() {
-        if(expenses.size() == 0) {
+        if (expenses.size() == 0) {
             expHint.setVisibility(View.VISIBLE);
             expList.setVisibility(View.GONE);
         } else {
             expHint.setVisibility(View.GONE);
             expList.setVisibility(View.VISIBLE);
-            ExpenseAdapter adapter = new ExpenseAdapter(ExpenseActivity.this,R.layout.roww_layout,expenses);
+            ExpenseAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.roww_layout, expenses);
             expList.setAdapter(adapter);
         }
     }
