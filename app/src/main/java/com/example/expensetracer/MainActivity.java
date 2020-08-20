@@ -44,16 +44,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
 
-
-        if (ni.isConnected()) {
-            if (mAuth.getCurrentUser() != null) {
-                Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                startActivity(intent);
+        try {
+            if (ni.isConnected()) {
+                if (mAuth.getCurrentUser() != null) {
+                    Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                    startActivity(intent);
+                }
+                loadAllViews();
+                FirebaseApp.initializeApp(this);
+            } else {
+                Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
             }
-            loadAllViews();
-            FirebaseApp.initializeApp(this);
-        } else {
-            Toast.makeText(MainActivity.this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
+        } catch (Exception err) {
+            Log.i("Error in network", err.toString());
         }
 
 
