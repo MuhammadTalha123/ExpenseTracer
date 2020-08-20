@@ -36,7 +36,6 @@ public class PaintingActivity extends AppCompatActivity {
     DrawingView drawingView;
     Button saveImageBtn;
     StorageReference storageReference;
-    ImageView imageView;
     FirebaseAuth mAuth;
     DatabaseReference ref;
     DatabaseReference expenseRef;
@@ -48,7 +47,6 @@ public class PaintingActivity extends AppCompatActivity {
 
 
         ref = FirebaseDatabase.getInstance().getReference();
-        imageView = findViewById(R.id.imageView);
         saveImageBtn = findViewById(R.id.saveimage_btn);
         drawingView = findViewById(R.id.myDrawing);
         mAuth = FirebaseAuth.getInstance();
@@ -59,7 +57,6 @@ public class PaintingActivity extends AppCompatActivity {
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        showImage();
 
 
         saveImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +104,7 @@ public class PaintingActivity extends AppCompatActivity {
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        Picasso.get().load(uri).into(imageView);
-                                        imageView.setImageURI(uri);
+
                                         Toast.makeText(PaintingActivity.this, uri.toString(), Toast.LENGTH_LONG).show();
                                         Log.i("imageUri", uri.toString());
                                         expenseRef.child("images").child(imageId).setValue(uri.toString());
@@ -146,19 +142,7 @@ public class PaintingActivity extends AppCompatActivity {
         drawingView.clearCanvas();
     }
 
-    public void showImage() {
 
-        final StorageReference fileRef = storageReference.child(mAuth.getCurrentUser().getUid());
-
-        fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(imageView);
-                imageView.setImageURI(uri);
-            }
-        });
-
-    }
 
 
 }

@@ -39,13 +39,13 @@ import java.util.UUID;
 public class ViewExpenseActivity extends AppCompatActivity {
 
     Expense expense;
-    ImageView imageView;
     TextView det_name;
     TextView det_cat;
     TextView det_amount;
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
+    ImageView imageView;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
 
@@ -57,8 +57,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
         loadAllViews();
-
-        imageView = findViewById(R.id.imageView);
 
     }
 
@@ -81,6 +79,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     public void loadAllViews() {
         expense = (Expense) getIntent().getExtras().get("expense");
         closeBtn = (Button) findViewById(R.id.closeBtn);
+        imageView = (ImageView) findViewById(R.id.imageView);
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
