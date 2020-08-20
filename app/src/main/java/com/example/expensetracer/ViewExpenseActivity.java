@@ -21,6 +21,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,6 +46,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
+    DatabaseReference databaseReference;
     StorageReference storageReference;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
@@ -62,10 +66,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
 //        final StorageReference fileRef = storageReference.child(mAuth.getCurrentUser().getUid());
 
 
-
-
-
-
 //        String imgSaved = new String();
 //        final StorageReference fileRef = storageReference.child(imgSaved+ UUID.randomUUID().toString());
 //        fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -83,21 +83,17 @@ public class ViewExpenseActivity extends AppCompatActivity {
 //        });
 
 
-
-
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu1,menu);
+        inflater.inflate(R.menu.menu1, menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.logOut) {
+        if (item.getItemId() == R.id.logOut) {
             mAuth.signOut();
             Intent intent = new Intent(ViewExpenseActivity.this, MainActivity.class);
             startActivity(intent);
@@ -120,10 +116,13 @@ public class ViewExpenseActivity extends AppCompatActivity {
         drawBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),PaintingActivity.class));
+                String expenseId = expense.getId();
+                Intent intent = new Intent(getApplicationContext(), PaintingActivity.class);
+                intent.putExtra("EXPENSE_ID", expenseId);
+                startActivity(intent);
             }
         });
-        if(expense != null) {
+        if (expense != null) {
             det_name = (TextView) findViewById(R.id.dt_name);
             det_cat = (TextView) findViewById(R.id.dt_category);
             det_amount = (TextView) findViewById(R.id.dt_amount);

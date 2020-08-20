@@ -37,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
@@ -55,13 +55,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.signUpBtn) {
+        if (v.getId() == R.id.signUpBtn) {
             final String fullName = fullNameField.getText().toString();
             final String email = emailField.getText().toString();
             final String password = passwordField.getText().toString();
-            if(email.isEmpty() || password.isEmpty() || fullName.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || fullName.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, R.string.toast_signup_empty_values, Toast.LENGTH_LONG).show();
             } else if (password.length() < 6) {
                 Toast.makeText(SignUpActivity.this, R.string.toast_signup_empty_values, Toast.LENGTH_LONG).show();
@@ -72,7 +73,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Log.d("test", "createUserWithEmail:onComplete:" + task.isSuccessful());
-
 
 
                                 if (!task.isSuccessful()) {
@@ -90,9 +90,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                             Log.d("TAG", "onFailure: Email not Sent " + e.getMessage());
                                         }
                                     });
-
-
-
 
 
                                     if (fUser != null) {

@@ -17,16 +17,19 @@ public class Expense implements Serializable {
     private int category;
     private float amount;
     private String cDate;
+    private String expenseId;
 
     public Expense() {
 
     }
 
-    public Expense(String name, int category, float amount, String cDate) {
+    public Expense(String name, int category, float amount, String cDate, String expenseId) {
         this.name = name;
         this.category = category;
         this.amount = amount;
         this.cDate = cDate;
+        this.cDate = cDate;
+        this.expenseId = expenseId;
 
     }
 
@@ -56,6 +59,10 @@ public class Expense implements Serializable {
 
     public String getcDate() {
         return cDate;
+    }
+
+    public String getExpenseId() {
+        return expenseId;
     }
 
     public void setcDate(String cDate) {

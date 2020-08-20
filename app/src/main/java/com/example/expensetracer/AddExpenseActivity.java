@@ -92,11 +92,12 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                 if(expenseName == "") {
                     Toast.makeText(AddExpenseActivity.this,"Enter Expense Name",Toast.LENGTH_LONG).show();
                 } else if(expenseAmt <= 0) {
+                } else if(expenseAmt <= 0) {
                     Toast.makeText(AddExpenseActivity.this,"Enter Expense Amount",Toast.LENGTH_LONG).show();
                 } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
                     String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
-                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal);
                     String key = expensesRef.push().getKey();
+                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key);
                     expensesRef.child(key).setValue(thisExpense);
                     finish();
                 }

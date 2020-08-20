@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,12 +39,13 @@ public class PaintingActivity extends AppCompatActivity {
     ImageView imageView;
     FirebaseAuth mAuth;
     DatabaseReference ref;
-    DatabaseReference expensesRef;
+    DatabaseReference expenseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_painting);
+
 
         ref = FirebaseDatabase.getInstance().getReference();
         imageView = findViewById(R.id.imageView);
@@ -52,17 +54,12 @@ public class PaintingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         final String uid = mAuth.getCurrentUser().getUid();
-        expensesRef = ref.child("users").child(uid).child("expenses");
-        storageReference = FirebaseStorage.getInstance().getReference().child(user.getUid());
+        final String imageId = UUID.randomUUID().toString();;
+        final String expenseId = getIntent().getStringExtra("EXPENSE_ID");
+        expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         showImage();
-
-
-
-
-
-
-
 
 
         saveImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -77,17 +74,15 @@ public class PaintingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         drawingView.setDrawingCacheEnabled(true);
-
                         String imgSaved = MediaStore.Images.Media.insertImage(
                                 getContentResolver(), drawingView.getDrawingCache(),
-                                UUID.randomUUID().toString()+".png", "drawing");
+                                imageId + ".png", "drawing");
 
-                        if(imgSaved!=null){
+                        if (imgSaved != null) {
                             Toast savedToast = Toast.makeText(getApplicationContext(),
                                     "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
                             savedToast.show();
-                        }
-                        else{
+                        } else {
                             Toast unsavedToast = Toast.makeText(getApplicationContext(),
                                     "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
                             unsavedToast.show();
@@ -103,29 +98,22 @@ public class PaintingActivity extends AppCompatActivity {
 
 
                         // upload image to firebase storage
-                        final StorageReference fileRef = storageReference.child(user.getUid());
+                        final StorageReference fileRef = storageReference.child(uid).child(expenseId).child(imageId);
                         fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
 
-//                                Uri downloadUrl = taskSnapshot.getUploadSessionUri();
-//                                String imageUri = downloadUrl.toString();
-//
-////                                expensesRef.push().getRoot().getParent().child("expenses", "imageUri");
-//                               expensesRef.child("imagesUrl").child("imageUri").setValue(imageUri);
-//                                Toast.makeText(PaintingActivity.this, imageUri, Toast.LENGTH_SHORT).show();
-
-                                fileRef.getDownloadUrl().toString();
-                                
-
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(imageView);
-                        imageView.setImageURI(uri);
-                    }
-                });
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Picasso.get().load(uri).into(imageView);
+                                        imageView.setImageURI(uri);
+                                        Toast.makeText(PaintingActivity.this, uri.toString(), Toast.LENGTH_LONG).show();
+                                        Log.i("imageUri", uri.toString());
+                                        expenseRef.child("images").child(imageId).setValue(uri.toString());
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -149,10 +137,6 @@ public class PaintingActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
 
 
     }
