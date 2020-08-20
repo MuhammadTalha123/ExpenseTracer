@@ -31,6 +31,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     DatabaseReference ref;
     DatabaseReference expensesRef;
     private FirebaseAuth mAuth;
+    String[] expenseImages = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                 } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
                     String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
                     String key = expensesRef.push().getKey();
-                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key);
+                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key, expenseImages);
                     expensesRef.child(key).setValue(thisExpense);
                     finish();
                 }

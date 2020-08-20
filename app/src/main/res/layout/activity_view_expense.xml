@@ -159,9 +159,9 @@
         android:text="Draw"
         android:textColor="@android:color/white" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
+    <ListView
+        android:id="@+id/imgList"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@+id/draw_btn"
         android:layout_centerHorizontal="true"

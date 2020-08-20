@@ -51,3 +51,8 @@ class ViewHolder {
     TextView nameText;
     TextView amountText;
 }
+
+
+class ExpenseImageAdapter {
+
+}

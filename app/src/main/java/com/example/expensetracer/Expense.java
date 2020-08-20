@@ -1,5 +1,7 @@
 package com.example.expensetracer;
 
+import android.widget.ListAdapter;
+
 import java.io.Serializable;
 
 public class Expense implements Serializable {
@@ -18,19 +20,20 @@ public class Expense implements Serializable {
     private float amount;
     private String cDate;
     private String expenseId;
+    private String[] expenseImages;
 
     public Expense() {
 
     }
 
-    public Expense(String name, int category, float amount, String cDate, String expenseId) {
+    public Expense(String name, int category, float amount, String cDate, String expenseId, String[] expenseImages) {
         this.name = name;
         this.category = category;
         this.amount = amount;
         this.cDate = cDate;
         this.cDate = cDate;
         this.expenseId = expenseId;
-
+        this.expenseImages = expenseImages;
     }
 
     public String getName() {
@@ -63,6 +66,10 @@ public class Expense implements Serializable {
 
     public String getExpenseId() {
         return expenseId;
+    }
+
+    public String[] getExpenseImages() {
+        return expenseImages;
     }
 
     public void setcDate(String cDate) {
