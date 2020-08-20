@@ -55,7 +55,8 @@ public class ViewExpenseActivity extends AppCompatActivity {
     Button closeBtn;
     Button drawBtn;
     ListView imgList;
-    ArrayList<String> imagesList;
+    ArrayList<String> imagesList = new ArrayList<String>();
+    ;
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
@@ -64,7 +65,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
-
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
         loadAllViews();
@@ -73,6 +73,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         String expenseId = expense.getExpenseId();
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
         getImages(imagesRef);
+
     }
 
     @Override
@@ -132,13 +133,13 @@ public class ViewExpenseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    imagesList.add(ds.getValue(String.class));
+                    String data = ds.getValue(String.class);
+                    imagesList.add(data);
                 }
                 try {
-//                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
-//                            android.R.layout.activity_list_item,
-//                            imagesList);
-//                    imgList.setAdapter(adapter);
+                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
+                            R.layout.activity_list_item, R.id.textView11, imagesList);
+                    imgList.setAdapter(adapter);
                 } catch (Exception err) {
                     Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
                 }
