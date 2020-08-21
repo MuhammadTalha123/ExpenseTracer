@@ -5,9 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -19,7 +27,10 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
     List<Expense> mObjects;
     DecimalFormat df = new DecimalFormat("###.#");
     public ExpenseAdapter(Context context, int resource, List<Expense> objects) {
+
+
         super(context, resource, objects);
+
         mContext = context;
         mResource = resource;
         mObjects = objects;
@@ -40,11 +51,16 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
         else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+
+
         Expense exp = mObjects.get(position);
         holder.nameText.setText(exp.getName());
         holder.amountText.setText(String.valueOf(df.format(exp.getAmount())));
         return convertView;
     }
+
+
 }
 
 class ViewHolder {
@@ -53,6 +69,4 @@ class ViewHolder {
 }
 
 
-class ExpenseImageAdapter {
 
-}

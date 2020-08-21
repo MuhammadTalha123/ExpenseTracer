@@ -1,49 +1,30 @@
 package com.example.expensetracer;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.lang.reflect.Array;
 import java.text.DecimalFormat;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class ViewExpenseActivity extends AppCompatActivity {
 
@@ -54,9 +35,8 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
-    ListView imgList;
-    ArrayList<String> imagesList = new ArrayList<String>();
-    ;
+    ViewPager myListView;
+    ImageView expenseImageListView;
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
@@ -66,6 +46,8 @@ public class ViewExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
         getSupportActionBar().setTitle(R.string.app_name_view);
+        expenseImageListView = findViewById(R.id.expenseImageListView);
+        myListView = findViewById(R.id.imgList);
         mAuth = FirebaseAuth.getInstance();
         loadAllViews();
         String uid = mAuth.getCurrentUser().getUid();
@@ -95,7 +77,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
     public void loadAllViews() {
         expense = (Expense) getIntent().getExtras().get("expense");
         closeBtn = (Button) findViewById(R.id.closeBtn);
-        imgList = (ListView) findViewById(R.id.imgList);
 
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +113,19 @@ public class ViewExpenseActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                String myUrls = "";
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String data = ds.getValue(String.class);
-                    imagesList.add(data);
+                  String data = ds.getValue(String.class);
+                    myUrls += "-split-" + data;
+
                 }
                 try {
-                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
-                            R.layout.activity_list_item, R.id.textView11, imagesList);
-                    imgList.setAdapter(adapter);
-                } catch (Exception err) {
-                    Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
+
+                    String[] strArr = myUrls.split("-split-");
+                    imageUrlsAdapter adapter = new imageUrlsAdapter(ViewExpenseActivity.this, strArr);
+                    myListView.setAdapter(adapter);
+                } catch (Exception err){
+                    Log.i("Adapter", err.toString());
                 }
             }
 
