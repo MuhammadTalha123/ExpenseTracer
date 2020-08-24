@@ -35,8 +35,8 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_date;
     Button closeBtn;
     Button drawBtn;
-    ViewPager myListView;
-    ImageView expenseImageListView;
+    ListView imgList;
+    ArrayList<String> imagesList = new ArrayList<String>();
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
@@ -119,14 +119,19 @@ public class ViewExpenseActivity extends AppCompatActivity {
                     myUrls += "-split-" + data;
 
                 }
-                try {
 
-                    String[] strArr = myUrls.split("-split-");
-                    imageUrlsAdapter adapter = new imageUrlsAdapter(ViewExpenseActivity.this, strArr);
-                    myListView.setAdapter(adapter);
-                } catch (Exception err){
-                    Log.i("Adapter", err.toString());
-                }
+
+                CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
+                imgList.setAdapter(customAdapter);
+
+//                try {
+//                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
+//                            R.layout.activity_list_item, R.id.textView11, imagesList);
+//                    imgList.setAdapter(adapter);
+//                } catch (Exception err) {
+//                    Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
+//                }
+
             }
 
             @Override
