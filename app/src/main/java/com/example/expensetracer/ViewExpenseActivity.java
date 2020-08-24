@@ -56,7 +56,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
     Button drawBtn;
     ListView imgList;
     ArrayList<String> imagesList = new ArrayList<String>();
-    ;
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
@@ -136,13 +135,17 @@ public class ViewExpenseActivity extends AppCompatActivity {
                     String data = ds.getValue(String.class);
                     imagesList.add(data);
                 }
-                try {
-                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
-                            R.layout.activity_list_item, R.id.textView11, imagesList);
-                    imgList.setAdapter(adapter);
-                } catch (Exception err) {
-                    Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
-                }
+
+                CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
+                imgList.setAdapter(customAdapter);
+
+//                try {
+//                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
+//                            R.layout.activity_list_item, R.id.textView11, imagesList);
+//                    imgList.setAdapter(adapter);
+//                } catch (Exception err) {
+//                    Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
+//                }
             }
 
             @Override
