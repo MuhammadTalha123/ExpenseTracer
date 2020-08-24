@@ -159,7 +159,7 @@
         android:text="Draw"
         android:textColor="@android:color/white" />
 
-    <ListView
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/imgList"
         android:layout_width="match_parent"
         android:layout_height="200dp"
