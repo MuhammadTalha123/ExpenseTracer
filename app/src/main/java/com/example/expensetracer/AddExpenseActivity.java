@@ -143,6 +143,11 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                             userRef.child("currentBalance").setValue(currentBalanceInt);
                             expAmountField.setText(0);
                             myAmount = 0;
+                        } else if(expenseType == "Credit" && myAmount != 0){
+                            currentBalanceInt = currentBalanceInt - myAmount;
+                            userRef.child("currentBalance").setValue(currentBalanceInt);
+                            expAmountField.setText(0);
+                            myAmount = 0;
                         }
                         Log.i("imgTest0", currentBalance.toString());
 
