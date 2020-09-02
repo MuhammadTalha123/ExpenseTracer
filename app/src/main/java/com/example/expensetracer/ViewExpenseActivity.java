@@ -76,6 +76,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
         getImages(imagesRef);
 
+
         imgList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -99,7 +100,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
                         dialogInterface.cancel();
                     }
                 });
-
 
 
                 delExp.show();
@@ -166,21 +166,24 @@ public class ViewExpenseActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String data = ds.getValue(String.class);
-                    imagesList.add(data);
+                boolean hasImages = dataSnapshot.exists();
+                if (hasImages) {
+                    try {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            String data = ds.getValue(String.class);
+                            imagesList.add(data);
+                        }
+                        Log.i("imgTest0", imagesList.toString());
+
+                        CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
+                        imgList.setAdapter(customAdapter);
+                    } catch (Exception err) {
+                        Log.i("imgTest0", err.toString());
+                    }
+                } else {
+                    Toast.makeText(ViewExpenseActivity.this, "Not Images", Toast.LENGTH_SHORT).show();
                 }
 
-                CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
-                imgList.setAdapter(customAdapter);
-
-//                try {
-//                    ArrayAdapter adapter = new ArrayAdapter(ViewExpenseActivity.this,
-//                            R.layout.activity_list_item, R.id.textView11, imagesList);
-//                    imgList.setAdapter(adapter);
-//                } catch (Exception err) {
-//                    Toast.makeText(ViewExpenseActivity.this, err.toString(), Toast.LENGTH_SHORT).show();
-//                }
             }
 
             @Override

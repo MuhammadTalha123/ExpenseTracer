@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,10 +56,9 @@ public class ExpenseActivity extends AppCompatActivity {
             expList.setVisibility(View.GONE);
             startActivity(new Intent(getApplicationContext(), VerifyActivity.class));
 
-        } else{
+        } else {
 
         }
-
 
 
     }
@@ -149,10 +149,14 @@ public class ExpenseActivity extends AppCompatActivity {
         expList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Expense exp = expenses.get(position);
-                Intent intent = new Intent(ExpenseActivity.this, ViewExpenseActivity.class);
-                intent.putExtra("expense", exp);
-                startActivity(intent);
+                try {
+                    Expense exp = expenses.get(position);
+                    Intent intent = new Intent(ExpenseActivity.this, ViewExpenseActivity.class);
+                    intent.putExtra("expense", exp);
+                    startActivity(intent);
+                } catch (Exception err) {
+                    Log.i("expenseErr", err.toString());
+                }
             }
         });
     }

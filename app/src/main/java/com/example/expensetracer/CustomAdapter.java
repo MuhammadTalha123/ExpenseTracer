@@ -18,8 +18,8 @@ public class CustomAdapter implements ListAdapter {
     Context context;
 
     public CustomAdapter(Context context, ArrayList<String> arrayList) {
-        this.arrayList=arrayList;
-        this.context=context;
+        this.arrayList = arrayList;
+        this.context = context;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CustomAdapter implements ListAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         String subjectData = arrayList.get(i);
-        if(view == null) {
+        if (view == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             view = layoutInflater.inflate(R.layout.activity_list_item, null);
             view.setOnClickListener(new View.OnClickListener() {
