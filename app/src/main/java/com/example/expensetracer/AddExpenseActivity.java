@@ -20,15 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddExpenseActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddExpenseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView expNameField,expAmountField;
+    TextView expNameField, expAmountField;
     Spinner expCategoryField;
     Spinner expenseTypeSelector;
 
@@ -36,15 +39,17 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     int catValue = -1;
     DatabaseReference ref;
     DatabaseReference expensesRef;
+    DatabaseReference userRef;
     private FirebaseAuth mAuth;
     String[] expenseImages = {};
+    TextView currentBalanceTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
         expenseTypeSelector = findViewById(R.id.expCategory);
-        String[] items = new String[]{"Deposit","Credit"};
+        String[] items = new String[]{"Deposit", "Credit"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         expenseTypeSelector.setAdapter(adapter);
         ref = FirebaseDatabase.getInstance().getReference();
@@ -53,17 +58,18 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         loadAllViews();
         String uid = mAuth.getCurrentUser().getUid();
         expensesRef = ref.child("users").child(uid).child("expenses");
+        userRef = ref.child("users").child(uid);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu1,menu);
+        inflater.inflate(R.menu.menu1, menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.logOut) {
+        if (item.getItemId() == R.id.logOut) {
             mAuth.signOut();
             Intent intent = new Intent(AddExpenseActivity.this, MainActivity.class);
             startActivity(intent);
@@ -79,12 +85,13 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         addBtn.setOnClickListener(this);
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(this);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddExpenseActivity.this, android.R.layout.simple_spinner_item,ExpenseActivity.categories);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddExpenseActivity.this, android.R.layout.simple_spinner_item, ExpenseActivity.categories);
         expCategoryField.setAdapter(adapter);
         expCategoryField.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 catValue = i;
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -93,34 +100,65 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    public void onClick(View v) {
-        if(v.getId() == R.id.addBtn) {
-            try{
-                String expenseName = expNameField.getText().toString();
-                Float expenseAmt = Float.parseFloat(expAmountField.getText().toString());
-                if(expenseName == "") {
-                    Toast.makeText(AddExpenseActivity.this,"Enter Expense Name",Toast.LENGTH_LONG).show();
-                } else if(expenseAmt <= 0) {
-                } else if(expenseAmt <= 0) {
-                    Toast.makeText(AddExpenseActivity.this,"Enter Expense Amount",Toast.LENGTH_LONG).show();
-                } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
-                    String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
-                    String key = expensesRef.push().getKey();
-                    String expenseType = expenseTypeSelector.getSelectedItem().toString();
-                    List<String> myImagesCurrent = new ArrayList<>();
-                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key, myImagesCurrent, expenseType);
-                    expensesRef.child(key).setValue(thisExpense);
-                    finish();
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(AddExpenseActivity.this,"Enter Valid Amount",Toast.LENGTH_LONG).show();
-                Log.i("valuesOne",e.toString());
-            } catch (Exception e) {
-                Toast.makeText(AddExpenseActivity.this,"Enter Valid Values",Toast.LENGTH_LONG).show();
-                Log.i("values",e.toString());
+    public void onClick(View view) {
+        boolean isAddButton = view.getId() == R.id.addBtn;
+        boolean isCancelButton = view.getId() == R.id.cancelBtn;
+        if (isAddButton) {
+            String expenseName = expNameField.getText().toString();
+            Integer expenseAmt = Integer.parseInt(expAmountField.getText().toString());
+            if (expenseName == "") {
+                Toast.makeText(AddExpenseActivity.this, "Enter Expense Name", Toast.LENGTH_LONG).show();
+            } else if (expenseAmt <= 0) {
+            } else if (expenseAmt <= 0) {
+                Toast.makeText(AddExpenseActivity.this, "Enter Expense Amount", Toast.LENGTH_LONG).show();
+            } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
+                String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
+                String key = expensesRef.push().getKey();
+                String expenseType = expenseTypeSelector.getSelectedItem().toString();
+                List<String> myImagesCurrent = new ArrayList<>();
+                Expense thisExpense = new Expense(expenseName, catValue, expenseAmt, dtVal, key, myImagesCurrent, expenseType);
+                expensesRef.child(key).setValue(thisExpense);
+                updateUserBalance(expenseAmt, expenseType);
+                finish();
             }
-        } else if (v.getId() == R.id.cancelBtn) {
+        } else if (isCancelButton) {
             finish();
         }
+    }
+
+    private void updateUserBalance(final Integer expenseAmt, final String expenseType) {
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean hasAmount = dataSnapshot.exists();
+                if (hasAmount) {
+                    try {
+                        String currentBalance = dataSnapshot.child("currentBalance").getValue().toString();
+                        Integer currentBalanceInt = Integer.parseInt(currentBalance);
+                        Integer myAmount = expenseAmt;
+                        if(expenseType == "Deposit" && myAmount != 0)
+                        {
+                            currentBalanceInt = currentBalanceInt + myAmount;
+                            userRef.child("currentBalance").setValue(currentBalanceInt);
+                            expAmountField.setText(0);
+                            myAmount = 0;
+                        }
+                        Log.i("imgTest0", currentBalance.toString());
+
+//                        Integer currentBalance = user
+                    } catch (Exception err) {
+                        Log.i("imgTest0", err.toString());
+                    }
+                } else {
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("labelError", databaseError.toString());
+            }
+        });
     }
 }
