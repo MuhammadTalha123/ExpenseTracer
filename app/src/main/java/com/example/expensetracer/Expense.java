@@ -3,6 +3,7 @@ package com.example.expensetracer;
 import android.widget.ListAdapter;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Expense implements Serializable {
     private String id;
@@ -20,13 +21,14 @@ public class Expense implements Serializable {
     private float amount;
     private String cDate;
     private String expenseId;
-    private String[] expenseImages;
+    private List<String> expenseImages;
+    private String expenseType;
 
     public Expense() {
 
     }
 
-    public Expense(String name, int category, float amount, String cDate, String expenseId, String[] expenseImages) {
+    public Expense(String name, int category, float amount, String cDate, String expenseId, List<String> expenseImages, String expenseType) {
         this.name = name;
         this.category = category;
         this.amount = amount;
@@ -34,6 +36,7 @@ public class Expense implements Serializable {
         this.cDate = cDate;
         this.expenseId = expenseId;
         this.expenseImages = expenseImages;
+        this.expenseType = expenseType;
     }
 
     public String getName() {
@@ -68,7 +71,11 @@ public class Expense implements Serializable {
         return expenseId;
     }
 
-    public String[] getExpenseImages() {
+    public String getExpenseType() {
+        return expenseType;
+    }
+
+    public List<String> getExpenseImages() {
         return expenseImages;
     }
 

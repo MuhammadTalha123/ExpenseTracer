@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,11 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AddExpenseActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView expNameField,expAmountField;
     Spinner expCategoryField;
-    Spinner dropdown;
+    Spinner expenseTypeSelector;
 
     Button addBtn, cancelBtn;
     int catValue = -1;
@@ -39,10 +43,10 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
-        dropdown = findViewById(R.id.expCategory);
+        expenseTypeSelector = findViewById(R.id.expCategory);
         String[] items = new String[]{"Deposit","Credit"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
+        expenseTypeSelector.setAdapter(adapter);
         ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         getSupportActionBar().setTitle(R.string.app_name_Add);
@@ -102,14 +106,18 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                 } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
                     String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
                     String key = expensesRef.push().getKey();
-                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key, expenseImages);
+                    String expenseType = expenseTypeSelector.getSelectedItem().toString();
+                    List<String> myImagesCurrent = new ArrayList<>();
+                    Expense thisExpense = new Expense(expenseName, catValue, expenseAmt,dtVal, key, myImagesCurrent, expenseType);
                     expensesRef.child(key).setValue(thisExpense);
                     finish();
                 }
             } catch (NumberFormatException e) {
                 Toast.makeText(AddExpenseActivity.this,"Enter Valid Amount",Toast.LENGTH_LONG).show();
+                Log.i("valuesOne",e.toString());
             } catch (Exception e) {
                 Toast.makeText(AddExpenseActivity.this,"Enter Valid Values",Toast.LENGTH_LONG).show();
+                Log.i("values",e.toString());
             }
         } else if (v.getId() == R.id.cancelBtn) {
             finish();
