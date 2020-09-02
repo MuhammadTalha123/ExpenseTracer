@@ -159,6 +159,22 @@
         android:text="Draw"
         android:textColor="@android:color/white" />
 
+    <TextView
+        android:id="@+id/noImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dt_date"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="160dp"
+        android:textAlignment="center"
+        android:textSize="23sp"
+        android:visibility="invisible"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="137dp"
+        android:text="No Image"
+        android:textColor="@android:color/white" />
+
     <ListView
         android:id="@+id/imgList"
         android:layout_width="match_parent"

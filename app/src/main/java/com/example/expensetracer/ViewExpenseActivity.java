@@ -62,6 +62,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
     private FirebaseAuth mAuth;
+    TextView noImageTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,15 +174,14 @@ public class ViewExpenseActivity extends AppCompatActivity {
                             String data = ds.getValue(String.class);
                             imagesList.add(data);
                         }
-                        Log.i("imgTest0", imagesList.toString());
-
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
                 } else {
-                    Toast.makeText(ViewExpenseActivity.this, "Not Images", Toast.LENGTH_SHORT).show();
+                    noImageTextView = findViewById(R.id.noImage);
+                    noImageTextView.setVisibility(View.VISIBLE);
                 }
 
             }
