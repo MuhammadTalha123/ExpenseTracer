@@ -49,8 +49,4 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">Hello Square World!</string>
-    <string name="expense_category">Expense Category</string>
-    <string name="enter_expense_name">Enter Expense Name...</string>
-    <string name="current_balance">Current Balance:</string>
-    <string name="_0">0</string>
 </resources>

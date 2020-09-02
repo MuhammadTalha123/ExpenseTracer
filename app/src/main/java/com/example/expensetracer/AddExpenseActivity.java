@@ -26,6 +26,8 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
 
     TextView expNameField,expAmountField;
     Spinner expCategoryField;
+    Spinner dropdown;
+
     Button addBtn, cancelBtn;
     int catValue = -1;
     DatabaseReference ref;
@@ -37,8 +39,10 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
-
-
+        dropdown = findViewById(R.id.expCategory);
+        String[] items = new String[]{"Deposit","Credit"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
         ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         getSupportActionBar().setTitle(R.string.app_name_Add);

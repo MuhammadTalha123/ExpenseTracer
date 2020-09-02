@@ -14,7 +14,6 @@ public class User {
     public String fullName;
     public String email;
     public String password;
-    public Integer currentBalance;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -42,9 +41,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setBalance(Integer currentBalance) {
-        this.currentBalance = currentBalance;
     }
 }

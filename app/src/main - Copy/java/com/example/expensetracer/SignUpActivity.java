@@ -94,13 +94,12 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                     if (fUser != null) {
                                         User user = new User();
-                                        String userId = fUser.getUid();
-                                        user.setId(userId);
+                                        String useruid = fUser.getUid();
+                                        user.setId(useruid);
                                         user.setFullName(fullName);
                                         user.setEmail(email);
                                         user.setPassword(password);
-                                        user.setBalance(0);
-                                        mDatabase.getReference().child("users").child(userId).setValue(user);
+                                        mDatabase.getReference().child("users").child(useruid).setValue(user);
                                         mAuth.signOut();
                                         Toast.makeText(SignUpActivity.this, R.string.toast_signup_success, Toast.LENGTH_LONG).show();
                                         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);

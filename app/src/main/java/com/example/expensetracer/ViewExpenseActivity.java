@@ -1,8 +1,10 @@
 package com.example.expensetracer;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -72,6 +75,38 @@ public class ViewExpenseActivity extends AppCompatActivity {
         String expenseId = expense.getExpenseId();
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
         getImages(imagesRef);
+
+        imgList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                final AlertDialog.Builder delExp = new AlertDialog.Builder(ViewExpenseActivity.this);
+                delExp.setTitle("Expense Deleting");
+                delExp.setMessage("You Will Loss Your Expense Detail...");
+                delExp.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+//                        Expense exp = expenses.get(position);
+//                        expensesRef.child(exp.getId()).removeValue();
+                        Toast.makeText(ViewExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+                delExp.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+
+
+                delExp.show();
+
+                return true;
+            }
+        });
 
     }
 
