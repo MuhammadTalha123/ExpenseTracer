@@ -27,7 +27,7 @@ public class CustomAdapter implements ListAdapter {
     Context context;
     StorageReference imageFireStoreRef;
 
-    DatabaseReference imageFirebasDBReg;
+    DatabaseReference imageFirebaseDBReg;
     String userId;
     Storage myStore;
 
@@ -36,7 +36,7 @@ public class CustomAdapter implements ListAdapter {
         this.context = context;
         this.myStore = Storage.getInstance();
         this.imageFireStoreRef = FirebaseStorage.getInstance().getReference();
-        this.imageFirebasDBReg = FirebaseDatabase.getInstance().getReference();
+        this.imageFirebaseDBReg = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -80,7 +80,7 @@ public class CustomAdapter implements ListAdapter {
     }
 
     @Override
-    public View getView(final int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, final ViewGroup viewGroup) {
 
         final String subjectData = arrayList.get(i);
         if (view == null) {
@@ -95,6 +95,11 @@ public class CustomAdapter implements ListAdapter {
 
                 }
             });
+            final ImageView image = view.findViewById(R.id.image);
+            Picasso.get()
+                    .load(subjectData)
+                    .into(image);
+
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {
@@ -115,8 +120,7 @@ public class CustomAdapter implements ListAdapter {
 
                             try {
                                 imageFireStoreRef.child(userId).child(expenseId).child(imageId).delete();
-                                imageFirebasDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
-                                view.setVisibility(View.GONE);
+                                imageFirebaseDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
                                 Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
                             } catch (Exception err) {
                                 Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
@@ -136,10 +140,6 @@ public class CustomAdapter implements ListAdapter {
                     return true;
                 }
             });
-            ImageView image = view.findViewById(R.id.image);
-            Picasso.get()
-                    .load(subjectData)
-                    .into(image);
         }
         return view;
     }
