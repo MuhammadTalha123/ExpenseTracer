@@ -3,6 +3,7 @@ package com.example.expensetracer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
@@ -22,9 +25,9 @@ public class CustomAdapter implements ListAdapter {
 
     ArrayList<String> arrayList;
     Context context;
-    StorageReference storageReference;
+    StorageReference imageFireStoreRef;
 
-    DatabaseReference ref;
+    DatabaseReference imageFirebasDBReg;
     String userId;
     Storage myStore;
 
@@ -32,6 +35,8 @@ public class CustomAdapter implements ListAdapter {
         this.arrayList = arrayList;
         this.context = context;
         this.myStore = Storage.getInstance();
+        this.imageFireStoreRef = FirebaseStorage.getInstance().getReference();
+        this.imageFirebasDBReg = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -87,15 +92,12 @@ public class CustomAdapter implements ListAdapter {
                     // Get user id
                     // get expense id
                     // Get image id
-                    String expenseId = myStore.getExpenseId();
-                    String userId = myStore.getUserId();
-                    String imageId = myStore.getImageIdFromUrl(subjectData);
-                    Toast.makeText(context, userId + expenseId + imageId, Toast.LENGTH_LONG).show();
+
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
+                public boolean onLongClick(final View view) {
 
                     AlertDialog.Builder delImage = new AlertDialog.Builder(context);
                     delImage.setTitle("Deleting Image?");
@@ -103,10 +105,23 @@ public class CustomAdapter implements ListAdapter {
                     delImage.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(context, "Yes", Toast.LENGTH_SHORT).show();
                             // Get user id
                             // get expense id
                             // Get image id
+
+                            String expenseId = myStore.getExpenseId();
+                            String userId = myStore.getUserId();
+                            String imageId = myStore.getImageIdFromUrl(subjectData);
+
+                            try {
+                                imageFireStoreRef.child(userId).child(expenseId).child(imageId).delete();
+                                imageFirebasDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
+                                view.setVisibility(View.GONE);
+                                Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
+                            } catch (Exception err) {
+                                Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
+                                Log.i("deleteImage", err.toString());
+                            }
 
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
