@@ -1,5 +1,6 @@
 package com.example.expensetracer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,9 +36,12 @@ public class ExpenseActivity extends AppCompatActivity {
     ListView expList;
     LinearLayout expHint;
     String uid;
+    String balanceAmount;
     DatabaseReference ref;
     DatabaseReference expensesRef;
+    DatabaseReference expenseTypeRef;
     FirebaseAuth mAuth;
+    TextView currentBalance;
     final static String[] categories = {"Groceries", "Invoice", "Transportation", "Shopping", "Rent", "Trips", "Utilities", "Other"};
 
     @Override
@@ -44,12 +49,30 @@ public class ExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense);
 
+        currentBalance = findViewById(R.id.currentBalance);
         getSupportActionBar().setTitle(R.string.app_name_Expense);
         ref = FirebaseDatabase.getInstance().getReference();
         loadAllViews();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
         FirebaseUser user = mAuth.getCurrentUser();
+        expenseTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
+
+        expenseTypeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                balanceAmount = snapshot.child("currentBalance").getValue().toString();
+                currentBalance.setText(balanceAmount);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         if (!user.isEmailVerified()) {
 
@@ -62,6 +85,7 @@ public class ExpenseActivity extends AppCompatActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,9 +150,24 @@ public class ExpenseActivity extends AppCompatActivity {
                 delExp.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Expense exp = expenses.get(position);
-                        expensesRef.child(exp.getId()).removeValue();
-                        Toast.makeText(ExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
+                        try {
+                            Integer userCurrentAmount = Integer.parseInt(balanceAmount);
+                            Expense exp = expenses.get(position);
+                            String expenseType = exp.getExpenseType();
+                            Integer expenseAmount = exp.getAmount();
+                            expensesRef.child(exp.getId()).removeValue();
+                            if (expenseType == "Credit") {
+                                userCurrentAmount = userCurrentAmount + expenseAmount;
+                            } else if (expenseType == "Deposit") {
+                                userCurrentAmount = userCurrentAmount - expenseAmount;
+                            }
+                            expenseTypeRef.child("currentBalance").setValue(userCurrentAmount);
+                            currentBalance.setText(userCurrentAmount.toString());
+                            Toast.makeText(ExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
+                        } catch (Exception err) {
+                            Toast.makeText(ExpenseActivity.this, "Unable to delete expense", Toast.LENGTH_SHORT).show();
+                            Log.i("deleteEx", err.toString());
+                        }
 
                     }
                 });

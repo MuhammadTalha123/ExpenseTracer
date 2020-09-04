@@ -75,6 +75,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         expense = (Expense) getIntent().getExtras().get("expense");
         String expenseId = expense.getExpenseId();
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
+
         getImages(imagesRef);
 
 
@@ -167,6 +168,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                noImageTextView = findViewById(R.id.noImage);
                 boolean hasImages = dataSnapshot.exists();
                 if (hasImages) {
                     try {
@@ -176,11 +178,11 @@ public class ViewExpenseActivity extends AppCompatActivity {
                         }
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
+                        noImageTextView.setVisibility(View.INVISIBLE);
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
                 } else {
-                    noImageTextView = findViewById(R.id.noImage);
                     noImageTextView.setVisibility(View.VISIBLE);
                 }
 

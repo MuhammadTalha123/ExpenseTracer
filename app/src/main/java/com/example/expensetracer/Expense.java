@@ -18,7 +18,7 @@ public class Expense implements Serializable {
 
     private String name;
     private int category;
-    private float amount;
+    private int amount;
     private String cDate;
     private String expenseId;
     private List<String> expenseImages;
@@ -28,7 +28,7 @@ public class Expense implements Serializable {
 
     }
 
-    public Expense(String name, int category, float amount, String cDate, String expenseId, List<String> expenseImages, String expenseType) {
+    public Expense(String name, int category, int amount, String cDate, String expenseId, List<String> expenseImages, String expenseType) {
         this.name = name;
         this.category = category;
         this.amount = amount;
@@ -55,11 +55,11 @@ public class Expense implements Serializable {
         this.category = category;
     }
 
-    public float getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
