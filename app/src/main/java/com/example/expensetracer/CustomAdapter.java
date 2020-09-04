@@ -1,6 +1,7 @@
 package com.example.expensetracer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.squareup.picasso.Picasso;
 
@@ -77,6 +80,30 @@ public class CustomAdapter implements ListAdapter {
                     // get expense id
                     // Get image id
                     Toast.makeText(context, "Image Clicked" + i + "", Toast.LENGTH_SHORT).show();
+                }
+            });
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+
+                    AlertDialog.Builder delImage = new AlertDialog.Builder(context);
+                    delImage.setTitle("Deleting Image?");
+                    delImage.setMessage("You Will Loss This Image...");
+                    delImage.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(context, "Yes", Toast.LENGTH_SHORT).show();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.cancel();
+                        }
+                    });
+
+                    delImage.show();
+
+                    return true;
                 }
             });
             ImageView image = view.findViewById(R.id.image);
