@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +64,7 @@ public class CustomAdapter implements ListAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
 
         String subjectData = arrayList.get(i);
         if (view == null) {
@@ -72,6 +73,10 @@ public class CustomAdapter implements ListAdapter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Get user id
+                    // get expense id
+                    // Get image id
+                    Toast.makeText(context, "Image Clicked" + i + "", Toast.LENGTH_SHORT).show();
                 }
             });
             ImageView image = view.findViewById(R.id.image);
