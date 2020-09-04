@@ -28,7 +28,7 @@ public class VerifyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify);
         mAuth = FirebaseAuth.getInstance();
-        login = (TextView) findViewById(R.id.nowlog);
+        login = (TextView) findViewById(R.id.againLogIn);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

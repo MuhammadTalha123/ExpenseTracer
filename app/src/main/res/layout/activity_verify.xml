@@ -47,10 +47,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
-        android:id="@+id/nowlog"
+        android:id="@+id/againLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Click Here To Signup Again"
+        android:text="Click Here To SignUp Again"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
