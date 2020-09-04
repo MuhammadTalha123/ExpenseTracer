@@ -55,6 +55,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     TextView det_cat;
     TextView det_amount;
     TextView det_date;
+    TextView expense_type;
     Button closeBtn;
     Button drawBtn;
     ListView imgList;
@@ -156,10 +157,13 @@ public class ViewExpenseActivity extends AppCompatActivity {
             det_cat = (TextView) findViewById(R.id.dt_category);
             det_amount = (TextView) findViewById(R.id.dt_amount);
             det_date = (TextView) findViewById(R.id.dt_date);
+            expense_type = (TextView) findViewById(R.id.expense_type);
             det_name.setText(expense.getName());
+            expense_type.setText(expense.getExpenseType());
             det_cat.setText(ExpenseActivity.categories[expense.getCategory()]);
             det_amount.setText(df.format(expense.getAmount()));
             det_date.setText(expense.getcDate());
+
         }
     }
 
