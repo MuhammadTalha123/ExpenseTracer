@@ -43,6 +43,7 @@ public class ExpenseActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     TextView currentBalance;
     final static String[] categories = {"Groceries", "Invoice", "Transportation", "Shopping", "Rent", "Trips", "Utilities", "Other"};
+    Storage myStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class ExpenseActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.app_name_Expense);
         ref = FirebaseDatabase.getInstance().getReference();
         loadAllViews();
+        myStore = Storage.getInstance();
         mAuth = FirebaseAuth.getInstance();
         uid = mAuth.getCurrentUser().getUid();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -192,6 +194,8 @@ public class ExpenseActivity extends AppCompatActivity {
                     Expense exp = expenses.get(position);
                     Intent intent = new Intent(ExpenseActivity.this, ViewExpenseActivity.class);
                     intent.putExtra("expense", exp);
+                    myStore.setExpenseId(exp.getExpenseId());
+                    myStore.setUserId(uid);
                     startActivity(intent);
                 } catch (Exception err) {
                     Log.i("expenseErr", err.toString());

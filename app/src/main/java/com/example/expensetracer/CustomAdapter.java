@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -24,16 +23,15 @@ public class CustomAdapter implements ListAdapter {
     ArrayList<String> arrayList;
     Context context;
     StorageReference storageReference;
-    FirebaseAuth mAuth;
 
     DatabaseReference ref;
     String userId;
+    Storage myStore;
 
     public CustomAdapter(Context context, ArrayList<String> arrayList) {
         this.arrayList = arrayList;
         this.context = context;
-        this.mAuth = FirebaseAuth.getInstance();
-        this.userId = mAuth.getCurrentUser().getUid();
+        this.myStore = Storage.getInstance();
     }
 
     @Override
@@ -89,7 +87,9 @@ public class CustomAdapter implements ListAdapter {
                     // Get user id
                     // get expense id
                     // Get image id
-                    Toast.makeText(context, userId, Toast.LENGTH_SHORT).show();
+                    String expenseId = myStore.getExpenseId();
+                    String userId = myStore.getUserId();
+                    Toast.makeText(context, userId + expenseId, Toast.LENGTH_SHORT).show();
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
