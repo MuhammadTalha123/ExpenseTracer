@@ -45,6 +45,7 @@ import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,8 +63,11 @@ public class ViewExpenseActivity extends AppCompatActivity {
     ArrayList<String> imagesList = new ArrayList<String>();
     DatabaseReference imagesRef;
     DecimalFormat df = new DecimalFormat("0.#");
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
+    Storage myStore;
     TextView noImageTextView;
+    HashMap<String, String> imagesHashMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +75,14 @@ public class ViewExpenseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_expense);
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
+        myStore = Storage.getInstance();
         loadAllViews();
-        String uid = mAuth.getCurrentUser().getUid();
+        imagesHashMap = new HashMap<String, String>();
+        String uid = myStore.getUserId();
         expense = (Expense) getIntent().getExtras().get("expense");
         String expenseId = expense.getExpenseId();
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
-
         getImages(imagesRef);
-
-        imgList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-        });
-
-
-
-
     }
 
     @Override
@@ -156,8 +150,11 @@ public class ViewExpenseActivity extends AppCompatActivity {
                     try {
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             String data = ds.getValue(String.class);
+                            imagesHashMap.put(data, ds.getKey());
                             imagesList.add(data);
                         }
+                        myStore.setImagesHashMap(imagesHashMap);
+                        Log.i("imagesHashMap", imagesHashMap.toString());
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
                         noImageTextView.setVisibility(View.INVISIBLE);

@@ -77,7 +77,7 @@ public class CustomAdapter implements ListAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
-        String subjectData = arrayList.get(i);
+        final String subjectData = arrayList.get(i);
         if (view == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             view = layoutInflater.inflate(R.layout.activity_list_item, null);
@@ -89,7 +89,8 @@ public class CustomAdapter implements ListAdapter {
                     // Get image id
                     String expenseId = myStore.getExpenseId();
                     String userId = myStore.getUserId();
-                    Toast.makeText(context, userId + expenseId, Toast.LENGTH_SHORT).show();
+                    String imageId = myStore.getImageIdFromUrl(subjectData);
+                    Toast.makeText(context, userId + expenseId + imageId, Toast.LENGTH_LONG).show();
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
