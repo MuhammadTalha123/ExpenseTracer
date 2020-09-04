@@ -52,8 +52,8 @@ public class PaintingActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
         final String uid = mAuth.getCurrentUser().getUid();
-        final String imageId = UUID.randomUUID().toString();;
         final String expenseId = getIntent().getStringExtra("EXPENSE_ID");
+        final String imageId = UUID.randomUUID().toString();;
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
 

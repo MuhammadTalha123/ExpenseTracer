@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,10 +23,17 @@ public class CustomAdapter implements ListAdapter {
 
     ArrayList<String> arrayList;
     Context context;
+    StorageReference storageReference;
+    FirebaseAuth mAuth;
+
+    DatabaseReference ref;
+    String userId;
 
     public CustomAdapter(Context context, ArrayList<String> arrayList) {
         this.arrayList = arrayList;
         this.context = context;
+        this.mAuth = FirebaseAuth.getInstance();
+        this.userId = mAuth.getCurrentUser().getUid();
     }
 
     @Override
@@ -79,7 +89,7 @@ public class CustomAdapter implements ListAdapter {
                     // Get user id
                     // get expense id
                     // Get image id
-                    Toast.makeText(context, "Image Clicked" + i + "", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, userId, Toast.LENGTH_SHORT).show();
                 }
             });
             view.setOnLongClickListener(new View.OnLongClickListener() {
@@ -93,6 +103,10 @@ public class CustomAdapter implements ListAdapter {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Toast.makeText(context, "Yes", Toast.LENGTH_SHORT).show();
+                            // Get user id
+                            // get expense id
+                            // Get image id
+
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
