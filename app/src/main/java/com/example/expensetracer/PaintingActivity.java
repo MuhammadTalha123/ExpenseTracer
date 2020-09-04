@@ -65,7 +65,7 @@ public class PaintingActivity extends AppCompatActivity {
 
                 final AlertDialog.Builder saveDialog = new AlertDialog.Builder(PaintingActivity.this);
                 saveDialog.setTitle("Save drawing");
-                saveDialog.setMessage("Save drawing to device Gallery?And Also Upload On FireStorage?");
+                saveDialog.setMessage("Drawing save to device Gallery?And Also Upload On FireStorage?");
                 saveDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -99,14 +99,11 @@ public class PaintingActivity extends AppCompatActivity {
                         fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
-
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
 
-                                        Toast.makeText(PaintingActivity.this, uri.toString(), Toast.LENGTH_LONG).show();
-                                        Log.i("imageUri", uri.toString());
+
                                         expenseRef.child("images").child(imageId).setValue(uri.toString());
                                     }
                                 });
