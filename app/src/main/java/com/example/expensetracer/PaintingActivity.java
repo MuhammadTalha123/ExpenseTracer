@@ -39,6 +39,7 @@ public class PaintingActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     DatabaseReference ref;
     DatabaseReference expenseRef;
+    Storage myStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class PaintingActivity extends AppCompatActivity {
         final String imageId = UUID.randomUUID().toString();;
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
+        myStore = Storage.getInstance();
 
 
 
@@ -88,6 +90,10 @@ public class PaintingActivity extends AppCompatActivity {
                         drawingView.destroyDrawingCache();
 
                         uploadImageToFirebase(imgSaved);
+                        Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
+                        Expense currentExpense = myStore.getCurrentExpense();
+                        myExpenseIntent.putExtra("expense", currentExpense);
+                        startActivity(myExpenseIntent);
 
                     }
 

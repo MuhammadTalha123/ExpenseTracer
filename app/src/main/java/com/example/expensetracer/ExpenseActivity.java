@@ -194,6 +194,7 @@ public class ExpenseActivity extends AppCompatActivity {
                     Expense exp = expenses.get(position);
                     Intent intent = new Intent(ExpenseActivity.this, ViewExpenseActivity.class);
                     intent.putExtra("expense", exp);
+                    myStore.setCurrentExpense(exp);
                     myStore.setExpenseId(exp.getExpenseId());
                     myStore.setUserId(uid);
                     startActivity(intent);

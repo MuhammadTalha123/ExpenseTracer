@@ -80,7 +80,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
         imagesHashMap = new HashMap<String, String>();
         String uid = myStore.getUserId();
         expense = (Expense) getIntent().getExtras().get("expense");
-        String expenseId = expense.getExpenseId();
+        String expenseId = myStore.getExpenseId();
         imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
         getImages(imagesRef);
     }

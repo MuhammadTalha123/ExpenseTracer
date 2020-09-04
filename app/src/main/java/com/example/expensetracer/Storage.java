@@ -6,6 +6,7 @@ public class Storage {
     private String userId;
     private String expenseId;
     private String imageId;
+    private Expense currentExpense;
     private HashMap<String, String> imagesHashMap;
 
     public void setUserId(String userIdToSet) {
@@ -31,6 +32,12 @@ public class Storage {
     }
 
 
+    public void setCurrentExpense(Expense expenseToSet) {
+        this.currentExpense = expenseToSet;
+        return;
+    }
+
+
     public String getUserId() {return userId;}
     public String getExpenseId() {return expenseId;}
     public String getImageId() {return imageId;}
@@ -39,6 +46,8 @@ public class Storage {
     public String getImageIdFromUrl(String imageUrl) {
         return imagesHashMap.get(imageUrl);
     }
+
+    public Expense getCurrentExpense() {return currentExpense;}
 
     private static final Storage holder = new Storage();
     public static Storage getInstance() {return holder;}
