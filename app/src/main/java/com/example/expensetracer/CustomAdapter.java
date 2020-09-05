@@ -95,11 +95,12 @@ public class CustomAdapter implements ListAdapter {
 
                 }
             });
+
             final ImageView image = view.findViewById(R.id.image);
             Picasso.get()
                     .load(subjectData)
                     .into(image);
-
+            
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {

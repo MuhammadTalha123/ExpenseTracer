@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,12 +68,14 @@ public class ViewExpenseActivity extends AppCompatActivity {
     Storage myStore;
     TextView noImageTextView;
     HashMap<String, String> imagesHashMap;
+    ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
+        progressBar = findViewById(R.id.progress_bar_for_images);
         getSupportActionBar().setTitle(R.string.app_name_view);
         mAuth = FirebaseAuth.getInstance();
         myStore = Storage.getInstance();
@@ -153,11 +156,13 @@ public class ViewExpenseActivity extends AppCompatActivity {
                             imagesHashMap.put(data, ds.getKey());
                             imagesList.add(data);
                         }
+                        progressBar.setVisibility(View.VISIBLE);
                         myStore.setImagesHashMap(imagesHashMap);
                         Log.i("imagesHashMap", imagesHashMap.toString());
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
                         noImageTextView.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
