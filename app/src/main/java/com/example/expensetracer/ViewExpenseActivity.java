@@ -144,10 +144,11 @@ public class ViewExpenseActivity extends AppCompatActivity {
 
     public void getImages(DatabaseReference reference) {
         // Attach a listener to read the data at our posts reference
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 noImageTextView = findViewById(R.id.noImage);
+                imagesList.clear();
                 Toast.makeText(ViewExpenseActivity.this, "Executed", Toast.LENGTH_SHORT).show();
                 boolean hasImages = dataSnapshot.exists();
                 if (hasImages) {
