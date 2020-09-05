@@ -28,6 +28,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     TextView fullNameField, emailField, passwordField;
     Button signUpBtn, cancelBtn;
     ProgressBar progressBar;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     public void loadAllViews() {
         mAuth = FirebaseAuth.getInstance();
+        firebaseUser = mAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance();
 
         fullNameField = (TextView) findViewById(R.id.fullNameField);
@@ -108,8 +110,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         mDatabase.getReference().child("users").child(userId).setValue(user);
                                         mAuth.signOut();
                                         Toast.makeText(SignUpActivity.this, R.string.toast_signup_success, Toast.LENGTH_LONG).show();
-                                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                            Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
+                                            startActivity(intent);
                                     }
                                 }
                             }

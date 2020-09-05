@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button loginBtn, signBtn;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         forgotTextLink = (TextView) findViewById(R.id.forgotTextLink);
 
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
 
 
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);

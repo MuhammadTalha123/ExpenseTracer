@@ -76,14 +76,7 @@ public class ExpenseActivity extends AppCompatActivity {
         });
 
 
-        if (!user.isEmailVerified()) {
 
-            expList.setVisibility(View.GONE);
-            startActivity(new Intent(getApplicationContext(), VerifyActivity.class));
-
-        } else {
-
-        }
 
 
     }
