@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView emailField, passwordField, forgotTextLink;
     Button loginBtn, signBtn;
     FirebaseAuth mAuth;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginBtn.setOnClickListener(this);
         signBtn = (Button) findViewById(R.id.signUpBtn);
         signBtn.setOnClickListener(this);
+        progressBar = findViewById(R.id.progress_circular);
+
 
 
     }
@@ -123,7 +127,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String password = passwordField.getText().toString();
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.INVISIBLE);
             } else {
+                progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -132,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (!task.isSuccessful()) {
                                     Log.w("test", "signInWithEmail:failed", task.getException());
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                                     startActivity(intent);

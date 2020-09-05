@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseDatabase mDatabase;
     TextView fullNameField, emailField, passwordField;
     Button signUpBtn, cancelBtn;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         signUpBtn.setOnClickListener(this);
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(this);
+        progressBar = findViewById(R.id.progress_circular);
     }
 
     @Override
@@ -77,7 +80,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this, R.string.toast_signup_error, Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 } else {
+                                    progressBar.setVisibility(View.VISIBLE);
                                     FirebaseUser fUser = mAuth.getCurrentUser();
                                     fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
