@@ -149,7 +149,6 @@ public class ViewExpenseActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 noImageTextView = findViewById(R.id.noImage);
                 imagesList.clear();
-                Toast.makeText(ViewExpenseActivity.this, "Executed", Toast.LENGTH_SHORT).show();
                 boolean hasImages = dataSnapshot.exists();
                 if (hasImages) {
                     try {
