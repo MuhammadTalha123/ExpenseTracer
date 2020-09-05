@@ -200,7 +200,7 @@ public class ExpenseActivity extends AppCompatActivity {
 
     public void showExpenseTable() {
         if (expenses.size() == 0) {
-            expHint.setVisibility(View.VISIBLE);
+            expHint.setVisibility(View.GONE);
             expList.setVisibility(View.GONE);
         } else {
             expHint.setVisibility(View.GONE);
