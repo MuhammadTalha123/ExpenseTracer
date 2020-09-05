@@ -163,11 +163,13 @@ public class ViewExpenseActivity extends AppCompatActivity {
                         imgList.setAdapter(customAdapter);
                         noImageTextView.setVisibility(View.INVISIBLE);
                         progressBar.setVisibility(View.INVISIBLE);
+
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
                 } else {
                     noImageTextView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
 
             }
