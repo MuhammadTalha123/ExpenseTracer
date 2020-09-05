@@ -144,10 +144,11 @@ public class ViewExpenseActivity extends AppCompatActivity {
 
     public void getImages(DatabaseReference reference) {
         // Attach a listener to read the data at our posts reference
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 noImageTextView = findViewById(R.id.noImage);
+                Toast.makeText(ViewExpenseActivity.this, "Executed", Toast.LENGTH_SHORT).show();
                 boolean hasImages = dataSnapshot.exists();
                 if (hasImages) {
                     try {
@@ -162,7 +163,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
                         noImageTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
 
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());

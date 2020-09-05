@@ -94,7 +94,6 @@ public class PaintingActivity extends AppCompatActivity {
                         Expense currentExpense = myStore.getCurrentExpense();
                         myExpenseIntent.putExtra("expense", currentExpense);
                         startActivity(myExpenseIntent);
-
                     }
 
                     private void uploadImageToFirebase(String imgSaved) {
@@ -108,8 +107,6 @@ public class PaintingActivity extends AppCompatActivity {
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-
-
                                         expenseRef.child("images").child(imageId).setValue(uri.toString());
                                     }
                                 });
