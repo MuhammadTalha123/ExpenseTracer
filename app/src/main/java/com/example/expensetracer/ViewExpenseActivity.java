@@ -155,6 +155,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
                             String data = ds.getValue(String.class);
                             imagesHashMap.put(data, ds.getKey());
                             imagesList.add(data);
+
                         }
                         progressBar.setVisibility(View.VISIBLE);
                         myStore.setImagesHashMap(imagesHashMap);

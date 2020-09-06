@@ -64,9 +64,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.signUpBtn) {
-            final String fullName = fullNameField.getText().toString();
-            final String email = emailField.getText().toString();
-            final String password = passwordField.getText().toString();
+            final String fullName = fullNameField.getText().toString().trim();
+            final String email = emailField.getText().toString().trim();
+            final String password = passwordField.getText().toString().trim();
             if (email.isEmpty() || password.isEmpty() || fullName.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, R.string.toast_signup_empty_values, Toast.LENGTH_LONG).show();
             } else if (password.length() < 6) {

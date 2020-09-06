@@ -19,6 +19,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
+import org.xml.sax.helpers.AttributeListImpl;
+
 import java.util.ArrayList;
 
 public class CustomAdapter implements ListAdapter {
@@ -123,6 +125,7 @@ public class CustomAdapter implements ListAdapter {
                                 imageFireStoreRef.child(userId).child(expenseId).child(imageId).delete();
                                 imageFirebaseDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
                                 Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
+
                             } catch (Exception err) {
                                 Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
                                 Log.i("deleteImage", err.toString());
@@ -133,6 +136,7 @@ public class CustomAdapter implements ListAdapter {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.cancel();
+
                         }
                     });
 

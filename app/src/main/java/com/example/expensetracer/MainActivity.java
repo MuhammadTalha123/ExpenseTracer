@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         user = mAuth.getCurrentUser();
 
 
-
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
 
@@ -119,15 +118,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progressBar = findViewById(R.id.progress_circular);
 
 
-
     }
 
     @Override
     public void onClick(View v) {
 
         if (v.getId() == R.id.loginBtn) {
-            String email = emailField.getText().toString();
-            String password = passwordField.getText().toString();
+            String email = emailField.getText().toString().trim();
+            String password = passwordField.getText().toString().trim();
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
