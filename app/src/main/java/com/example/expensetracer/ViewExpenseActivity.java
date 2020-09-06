@@ -148,6 +148,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 noImageTextView = findViewById(R.id.noImage);
+                imagesList.clear();
                 boolean hasImages = dataSnapshot.exists();
                 if (hasImages) {
                     try {
@@ -163,7 +164,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
                         CustomAdapter customAdapter = new CustomAdapter(ViewExpenseActivity.this, imagesList);
                         imgList.setAdapter(customAdapter);
                         noImageTextView.setVisibility(View.INVISIBLE);
-                        progressBar.setVisibility(View.INVISIBLE);
+                        progressBar.setVisibility(View.GONE);
 
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());

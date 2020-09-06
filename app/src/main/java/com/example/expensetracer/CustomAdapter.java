@@ -125,7 +125,7 @@ public class CustomAdapter implements ListAdapter {
                                 imageFireStoreRef.child(userId).child(expenseId).child(imageId).delete();
                                 imageFirebaseDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
                                 Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
-
+                                image.setVisibility(View.GONE);
                             } catch (Exception err) {
                                 Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
                                 Log.i("deleteImage", err.toString());
