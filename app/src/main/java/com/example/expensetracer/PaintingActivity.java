@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class PaintingActivity extends AppCompatActivity {
     DatabaseReference ref;
     DatabaseReference expenseRef;
     Storage myStore;
+//    ProgressBar progressBar;
     String uid;
     String expenseId;
     String imageId;
@@ -64,16 +66,14 @@ public class PaintingActivity extends AppCompatActivity {
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
+//        progressBar = findViewById(R.id.progress_bar_for_images);
 
         image_from_gallery.setOnClickListener(new View.OnClickListener() {
-
-         int requestCode;
-         int resultCode;
-
             @Override
             public void onClick(View view) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);
+//                progressBar.setVisibility(View.VISIBLE);
 
             }
         });
@@ -171,6 +171,11 @@ public class PaintingActivity extends AppCompatActivity {
             }
         }
 
+        Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
+        Expense currentExpense = myStore.getCurrentExpense();
+        myExpenseIntent.putExtra("expense", currentExpense);
+        startActivity(myExpenseIntent);
+
     }
 
     private void uploadToFirebase(Uri imageURi) {
@@ -181,6 +186,7 @@ public class PaintingActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+//                        progressBar.setVisibility(View.INVISIBLE);
                         expenseRef.child("images").child(imageId).setValue(uri.toString());
                         Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
                     }
