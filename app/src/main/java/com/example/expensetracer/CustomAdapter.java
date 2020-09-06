@@ -3,6 +3,9 @@ package com.example.expensetracer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import org.xml.sax.helpers.AttributeListImpl;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CustomAdapter implements ListAdapter {
@@ -102,7 +106,7 @@ public class CustomAdapter implements ListAdapter {
             Picasso.get()
                     .load(subjectData)
                     .into(image);
-            
+
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View view) {
@@ -131,6 +135,19 @@ public class CustomAdapter implements ListAdapter {
                                 Log.i("deleteImage", err.toString());
                             }
 
+
+                            String file_dj_path = Environment.getExternalStorageDirectory() + "/Pictures/" + imageId + ".jpg";
+                            File fdelete = new File(file_dj_path);
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+                                    Log.e("-->", "file Deleted :" + file_dj_path);
+//                            callBroadCast();
+                                } else {
+                                    Log.e("-->", "file not Deleted :" + file_dj_path);
+                                }
+                            }
+
+
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -145,6 +162,8 @@ public class CustomAdapter implements ListAdapter {
                     return true;
                 }
             });
+
+            
         }
         return view;
     }

@@ -75,8 +75,7 @@ public class PaintingActivity extends AppCompatActivity {
                         drawingView.setDrawingCacheEnabled(true);
                         String imgSaved = MediaStore.Images.Media.insertImage(
                                 getContentResolver(), drawingView.getDrawingCache(),
-                                imageId + ".png", "drawing");
-
+                                imageId, "drawing");
                         if (imgSaved != null) {
                             Toast savedToast = Toast.makeText(getApplicationContext(),
                                     "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
