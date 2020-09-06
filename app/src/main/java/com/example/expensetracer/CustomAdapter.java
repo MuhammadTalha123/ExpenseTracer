@@ -163,7 +163,7 @@ public class CustomAdapter implements ListAdapter {
                 }
             });
 
-            
+
         }
         return view;
     }

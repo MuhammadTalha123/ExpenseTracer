@@ -1,9 +1,11 @@
 package com.example.expensetracer;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -34,12 +36,15 @@ public class PaintingActivity extends AppCompatActivity {
 
 
     DrawingView drawingView;
-    Button saveImageBtn;
+    Button saveImageBtn,image_from_gallery;
     StorageReference storageReference;
     FirebaseAuth mAuth;
     DatabaseReference ref;
     DatabaseReference expenseRef;
     Storage myStore;
+    String uid;
+    String expenseId;
+    String imageId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +54,29 @@ public class PaintingActivity extends AppCompatActivity {
 
         ref = FirebaseDatabase.getInstance().getReference();
         saveImageBtn = findViewById(R.id.saveimage_btn);
+        image_from_gallery = findViewById(R.id.image_from_gallery);
         drawingView = findViewById(R.id.myDrawing);
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
-        final String uid = mAuth.getCurrentUser().getUid();
-        final String expenseId = getIntent().getStringExtra("EXPENSE_ID");
-        final String imageId = UUID.randomUUID().toString();;
+        uid = mAuth.getCurrentUser().getUid();
+        expenseId = getIntent().getStringExtra("EXPENSE_ID");
+        imageId = UUID.randomUUID().toString();;
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
+
+        image_from_gallery.setOnClickListener(new View.OnClickListener() {
+
+         int requestCode;
+         int resultCode;
+
+            @Override
+            public void onClick(View view) {
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000);
+
+            }
+        });
 
 
 
@@ -95,7 +114,7 @@ public class PaintingActivity extends AppCompatActivity {
                         startActivity(myExpenseIntent);
                     }
 
-                    private void uploadImageToFirebase(String imgSaved) {
+                    public void uploadImageToFirebase(String imgSaved) {
 
 
                         // upload image to firebase storage
@@ -137,11 +156,45 @@ public class PaintingActivity extends AppCompatActivity {
     }
 
 
+
     public void clearCanvas(View v) {
         drawingView.clearCanvas();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri imageURi = data.getData();
+                uploadToFirebase(imageURi);
+            }
+        }
 
+    }
+
+    private void uploadToFirebase(Uri imageURi) {
+        final StorageReference fileRef = storageReference.child(uid).child(expenseId).child(imageId);
+        fileRef.putFile(imageURi).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        expenseRef.child("images").child(imageId).setValue(uri.toString());
+                        Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PaintingActivity.this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
 
 
 }
