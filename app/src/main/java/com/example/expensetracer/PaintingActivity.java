@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.UUID;
 
@@ -37,13 +39,12 @@ public class PaintingActivity extends AppCompatActivity {
 
 
     DrawingView drawingView;
-    Button saveImageBtn,image_from_gallery,camera;
+    Button saveImageBtn, image_from_gallery, camera;
     StorageReference storageReference;
     FirebaseAuth mAuth;
     DatabaseReference ref;
     DatabaseReference expenseRef;
     Storage myStore;
-//    ProgressBar progressBar;
     String uid;
     String expenseId;
     String imageId;
@@ -63,12 +64,11 @@ public class PaintingActivity extends AppCompatActivity {
         final FirebaseUser user = mAuth.getCurrentUser();
         uid = mAuth.getCurrentUser().getUid();
         expenseId = getIntent().getStringExtra("EXPENSE_ID");
-        imageId = UUID.randomUUID().toString();;
+        imageId = UUID.randomUUID().toString();
+        ;
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
-//        progressBar = findViewById(R.id.progress_bar_for_images);
-
 
 
         // open camera mobile phone
@@ -77,9 +77,8 @@ public class PaintingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent();
-                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(intent);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -88,11 +87,9 @@ public class PaintingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);
-//                progressBar.setVisibility(View.VISIBLE);
 
             }
         });
-
 
 
         saveImageBtn.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +168,6 @@ public class PaintingActivity extends AppCompatActivity {
     }
 
 
-
     public void clearCanvas(View v) {
         drawingView.clearCanvas();
     }
@@ -184,7 +180,26 @@ public class PaintingActivity extends AppCompatActivity {
                 Uri imageURi = data.getData();
                 uploadToFirebase(imageURi);
             }
+            return;
         }
+        try {
+            if (requestCode == 0) {
+                if (resultCode == Activity.RESULT_OK) {
+
+                    Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
+                    Uri capturedImageUri = Uri.parse(path);
+                    uploadToFirebaseCameraImage(capturedImageUri);
+                }
+            }
+        } catch (Exception err) {
+            Toast.makeText(this, "Your Error" + err.toString(), Toast.LENGTH_LONG).show();
+            Log.i("error",err.toString());
+        }
+
 
         Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
         Expense currentExpense = myStore.getCurrentExpense();
@@ -192,6 +207,28 @@ public class PaintingActivity extends AppCompatActivity {
         startActivity(myExpenseIntent);
 
     }
+
+    private void uploadToFirebaseCameraImage(Uri capturedImageUri) {
+        final StorageReference fileRef = storageReference.child(uid).child(expenseId).child(imageId);
+        fileRef.putFile(capturedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        expenseRef.child("images").child(imageId).setValue(uri.toString());
+                        Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(PaintingActivity.this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     private void uploadToFirebase(Uri imageURi) {
         final StorageReference fileRef = storageReference.child(uid).child(expenseId).child(imageId);
@@ -201,7 +238,6 @@ public class PaintingActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-//                        progressBar.setVisibility(View.INVISIBLE);
                         expenseRef.child("images").child(imageId).setValue(uri.toString());
                         Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
                     }
