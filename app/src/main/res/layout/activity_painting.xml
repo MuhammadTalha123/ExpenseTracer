@@ -19,6 +19,18 @@
          />
 
     <Button
+        android:id="@+id/camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:onClick="clearCanvas"
+        android:text="open camera"
+        android:textColor="@android:color/white"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"/>
+
+    <Button
         android:id="@+id/image_from_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

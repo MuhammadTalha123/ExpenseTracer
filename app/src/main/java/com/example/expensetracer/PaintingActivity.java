@@ -37,7 +37,7 @@ public class PaintingActivity extends AppCompatActivity {
 
 
     DrawingView drawingView;
-    Button saveImageBtn,image_from_gallery;
+    Button saveImageBtn,image_from_gallery,camera;
     StorageReference storageReference;
     FirebaseAuth mAuth;
     DatabaseReference ref;
@@ -54,6 +54,7 @@ public class PaintingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_painting);
 
 
+        camera = findViewById(R.id.camera);
         ref = FirebaseDatabase.getInstance().getReference();
         saveImageBtn = findViewById(R.id.saveimage_btn);
         image_from_gallery = findViewById(R.id.image_from_gallery);
@@ -67,6 +68,20 @@ public class PaintingActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
 //        progressBar = findViewById(R.id.progress_bar_for_images);
+
+
+
+        // open camera mobile phone
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent();
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivity(intent);
+            }
+        });
 
         image_from_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
