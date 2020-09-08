@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/backgroun_color"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="2dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".ViewExpenseActivity">
 
     <TextView
-        android:text="@string/detail_Title"
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
         android:layout_marginTop="15dp"
-        android:id="@+id/textView5"
-        android:textStyle="bold"
-        android:textSize="24sp" />
+        android:text="@string/detail_Title"
+        android:textColor="#222831"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView6"
@@ -35,137 +35,136 @@
         android:layout_toStartOf="@+id/textView5"
         android:layout_toLeftOf="@+id/textView5"
         android:text="@string/detail_Name"
-        android:textColor="@android:color/white"
+        android:textColor="#222831"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/dt_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
         android:layout_alignTop="@+id/textView6"
-        android:layout_toRightOf="@+id/textView6"
-        android:layout_toEndOf="@+id/textView6"
-        android:layout_marginLeft="30dp"
         android:layout_marginStart="30dp"
-        android:id="@+id/dt_name"
+        android:layout_marginLeft="30dp"
+        android:layout_toEndOf="@+id/textView6"
+        android:layout_toRightOf="@+id/textView6"
+        android:textColor="#222831"
         android:textSize="18sp" />
 
     <TextView
-        android:text="@string/detail_Category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_below="@+id/textView6"
-        android:layout_alignLeft="@+id/textView6"
-        android:layout_alignStart="@+id/textView6"
-        android:layout_marginTop="15dp"
         android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_alignStart="@+id/textView6"
+        android:layout_alignLeft="@+id/textView6"
+        android:layout_marginTop="15dp"
+        android:text="@string/detail_Category"
+        android:textColor="#222831"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/textView8"
-        android:layout_alignRight="@+id/dt_name"
-        android:layout_alignEnd="@+id/dt_name"
         android:id="@+id/dt_category"
-        android:layout_alignLeft="@+id/dt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignStart="@+id/dt_name"
+        android:layout_alignLeft="@+id/dt_name"
+        android:layout_alignTop="@+id/textView8"
+        android:layout_alignEnd="@+id/dt_name"
+        android:layout_alignRight="@+id/dt_name"
+        android:textColor="#222831"
         android:textSize="18sp" />
 
     <TextView
-        android:text="@string/detail_Amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_below="@+id/textView8"
-        android:layout_alignLeft="@+id/textView8"
-        android:layout_alignStart="@+id/textView8"
-        android:layout_marginTop="15dp"
         android:id="@+id/textView10"
-        android:layout_alignRight="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView8"
+        android:layout_alignStart="@+id/textView8"
+        android:layout_alignLeft="@+id/textView8"
         android:layout_alignEnd="@+id/textView8"
+        android:layout_alignRight="@+id/textView8"
+        android:layout_marginTop="15dp"
+        android:text="@string/detail_Amount"
+        android:textColor="#222831"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/textView10"
-        android:layout_alignLeft="@+id/dt_category"
-        android:layout_alignStart="@+id/dt_category"
         android:id="@+id/dt_amount"
-        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/dt_category"
+        android:layout_alignLeft="@+id/dt_category"
+        android:layout_alignTop="@+id/textView10"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textColor="#222831"
         android:textSize="18sp" />
 
     <TextView
-        android:text="@string/detail_Date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_below="@+id/textView10"
-        android:layout_alignRight="@+id/textView10"
-        android:layout_alignEnd="@+id/textView10"
-        android:layout_marginTop="15dp"
         android:id="@+id/textView12"
-        android:layout_alignLeft="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView10"
         android:layout_alignStart="@+id/textView10"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/textView12"
-        android:layout_alignRight="@+id/dt_amount"
-        android:layout_alignEnd="@+id/dt_amount"
-        android:id="@+id/dt_date"
-        android:layout_alignLeft="@+id/dt_amount"
-        android:layout_alignStart="@+id/dt_amount"
-        android:textSize="18sp" />
-
-    <TextView
-        android:text="@string/type"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_below="@+id/textView12"
-        android:layout_alignRight="@+id/textView10"
+        android:layout_alignLeft="@+id/textView10"
         android:layout_alignEnd="@+id/textView10"
+        android:layout_alignRight="@+id/textView10"
         android:layout_marginTop="15dp"
-        android:id="@+id/textView13"
-        android:layout_alignLeft="@+id/textView10"
-        android:layout_alignStart="@+id/textView10"
+        android:text="@string/detail_Date"
+        android:textColor="#222831"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/dt_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/textView13"
-        android:layout_alignRight="@+id/dt_amount"
-        android:layout_alignEnd="@+id/dt_amount"
-        android:id="@+id/expense_type"
-        android:layout_alignLeft="@+id/dt_amount"
         android:layout_alignStart="@+id/dt_amount"
+        android:layout_alignLeft="@+id/dt_amount"
+        android:layout_alignTop="@+id/textView12"
+        android:layout_alignEnd="@+id/dt_amount"
+        android:layout_alignRight="@+id/dt_amount"
+        android:textColor="#222831"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView12"
+        android:layout_alignStart="@+id/textView10"
+        android:layout_alignLeft="@+id/textView10"
+        android:layout_alignEnd="@+id/textView10"
+        android:layout_alignRight="@+id/textView10"
+        android:layout_marginTop="15dp"
+        android:text="@string/type"
+        android:textColor="#222831"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/expense_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/dt_amount"
+        android:layout_alignLeft="@+id/dt_amount"
+        android:layout_alignTop="@+id/textView13"
+        android:layout_alignEnd="@+id/dt_amount"
+        android:layout_alignRight="@+id/dt_amount"
+        android:textColor="#222831"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/closeBtn"
-        android:layout_width="match_parent"
+        android:layout_width="117dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dt_date"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="116dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="137dp"
         android:background="@drawable/edittext_background"
@@ -174,12 +173,12 @@
 
     <Button
         android:id="@+id/draw_btn"
-        android:layout_width="match_parent"
+        android:layout_width="133dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dt_date"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="105dp"
+        android:layout_marginTop="59dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="137dp"
         android:background="@drawable/edittext_background"
@@ -193,14 +192,14 @@
         android:layout_below="@+id/dt_date"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="165dp"
-        android:textAlignment="center"
-        android:textSize="23sp"
-        android:visibility="invisible"
+        android:layout_marginTop="175dp"
         android:layout_marginRight="50dp"
         android:layout_marginBottom="137dp"
         android:text="No Image"
-        android:textColor="@android:color/white" />
+        android:textAlignment="center"
+        android:textColor="#393e46"
+        android:textSize="23sp"
+        android:visibility="invisible" />
 
     <ListView
         android:id="@+id/imgList"
@@ -210,7 +209,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="-60dp"
-        android:layout_marginRight="10dp"/>
+        android:layout_marginRight="10dp" />
 
     <ProgressBar
         android:id="@+id/progress_bar_for_images"
@@ -220,7 +219,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="-70dp"
-        android:layout_marginRight="10dp"
-        />
+        android:layout_marginRight="10dp" />
 
 </RelativeLayout>
