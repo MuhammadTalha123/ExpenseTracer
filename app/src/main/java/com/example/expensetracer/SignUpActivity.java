@@ -28,7 +28,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseDatabase mDatabase;
     TextView fullNameField, emailField, passwordField;
     Button signUpBtn, cancelBtn;
-    ProgressBar progressBar;
     FirebaseUser firebaseUser;
     Utils myUtils;
 
@@ -61,7 +60,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         signUpBtn.setOnClickListener(this);
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
         cancelBtn.setOnClickListener(this);
-        progressBar = findViewById(R.id.progress_circular);
     }
 
     @Override
@@ -86,9 +84,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this, R.string.toast_signup_error, Toast.LENGTH_LONG).show();
-                                    progressBar.setVisibility(View.INVISIBLE);
+                                    myUtils.hideLoading();
                                 } else {
-                                    progressBar.setVisibility(View.VISIBLE);
+                                    myUtils.hideLoading();
                                     FirebaseUser fUser = mAuth.getCurrentUser();
                                     fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
