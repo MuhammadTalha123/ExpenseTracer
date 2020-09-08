@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -130,6 +131,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setMax(100);
+                // Setting Title
+                progressDialog.setTitle("ProgressDialog");
+                // Setting Message
+                progressDialog.setMessage("Loading...");
+                // Progress Dialog Style Horizontal
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                // Progress Dialog Style Spinner
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
                 progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -140,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Log.w("test", "signInWithEmail:failed", task.getException());
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.INVISIBLE);
+                                    progressDialog.dismiss();
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                                     startActivity(intent);

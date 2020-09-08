@@ -3,6 +3,7 @@ package com.example.expensetracer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,6 +73,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             } else if (password.length() < 6) {
                 Toast.makeText(SignUpActivity.this, R.string.toast_signup_empty_values, Toast.LENGTH_LONG).show();
             } else {
+                final ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setMax(100);
+                // Setting Title
+                progressDialog.setTitle("ProgressDialog");
+                // Setting Message
+                progressDialog.setMessage("Loading...");
+                // Progress Dialog Style Horizontal
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                // Progress Dialog Style Spinner
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -109,6 +121,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         user.setBalance(0);
                                         mDatabase.getReference().child("users").child(userId).setValue(user);
                                         mAuth.signOut();
+                                        progressDialog.dismiss();
                                         Toast.makeText(SignUpActivity.this, R.string.toast_signup_success, Toast.LENGTH_LONG).show();
                                             Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
                                             startActivity(intent);
