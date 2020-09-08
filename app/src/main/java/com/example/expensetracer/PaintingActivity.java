@@ -182,6 +182,9 @@ public class PaintingActivity extends AppCompatActivity {
             }
             return;
         }
+
+
+
         try {
             if (requestCode == 0) {
                 if (resultCode == Activity.RESULT_OK) {
