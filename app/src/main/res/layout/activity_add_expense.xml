@@ -85,7 +85,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:ems="10"
         android:background="@drawable/edittext_background"
         android:padding="10dp"
