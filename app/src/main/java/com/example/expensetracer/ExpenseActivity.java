@@ -147,7 +147,6 @@ public class ExpenseActivity extends AppCompatActivity {
                             Expense exp = expenses.get(position);
                             String expenseType = exp.getExpenseType();
                             Integer expenseAmount = exp.getAmount();
-                            expensesRef.child(exp.getId()).removeValue();
                             if (expenseType == "Credit") {
                                 userCurrentAmount = userCurrentAmount + expenseAmount;
                             } else if (expenseType == "Deposit") {
@@ -155,6 +154,7 @@ public class ExpenseActivity extends AppCompatActivity {
                             }
                             expenseTypeRef.child("currentBalance").setValue(userCurrentAmount);
                             currentBalance.setText(userCurrentAmount.toString());
+                            expensesRef.child(exp.getId()).removeValue();
                             Toast.makeText(ExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
                         } catch (Exception err) {
                             Toast.makeText(ExpenseActivity.this, "Unable to delete expense", Toast.LENGTH_SHORT).show();
