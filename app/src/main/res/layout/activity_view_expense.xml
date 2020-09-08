@@ -48,6 +48,8 @@
         android:layout_marginLeft="30dp"
         android:layout_toEndOf="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
+        android:breakStrategy="balanced"
+        android:maxLength="25"
         android:textColor="#222831"
         android:textSize="18sp" />
 

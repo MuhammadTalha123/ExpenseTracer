@@ -105,6 +105,6 @@
         android:text="Forgot Password?"
         android:textStyle="bold"
         android:textColor="#222831"
-        android:textSize="14sp" />
+        android:textSize="17sp" />
 
 </RelativeLayout>
