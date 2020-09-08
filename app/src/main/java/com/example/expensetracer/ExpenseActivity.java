@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,8 +44,10 @@ public class ExpenseActivity extends AppCompatActivity {
     DatabaseReference expenseTypeRef;
     FirebaseAuth mAuth;
     TextView currentBalance;
+    Integer userCurrentAmount;
     final static String[] categories = {"Groceries", "Invoice", "Transportation", "Shopping", "Rent", "Trips", "Utilities", "Other"};
     Storage myStore;
+    Utils myUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,9 @@ public class ExpenseActivity extends AppCompatActivity {
         loadAllViews();
         myStore = Storage.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        myUtils = Utils.getInstance();
         uid = mAuth.getCurrentUser().getUid();
+        userCurrentAmount = 0;
         FirebaseUser user = mAuth.getCurrentUser();
         expenseTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
 
@@ -126,6 +132,7 @@ public class ExpenseActivity extends AppCompatActivity {
         expList = findViewById(R.id.expensesListView);
         addExp = findViewById(R.id.addExpenseButton);
         expHint = findViewById(R.id.addExpenseBody);
+
         addExp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +150,8 @@ public class ExpenseActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try {
-                            Integer userCurrentAmount = Integer.parseInt(balanceAmount);
+                            myUtils.showLoading(ExpenseActivity.this);
+                            userCurrentAmount = Integer.parseInt(balanceAmount);
                             Expense exp = expenses.get(position);
                             String expenseType = exp.getExpenseType();
                             Integer expenseAmount = exp.getAmount();
@@ -152,10 +160,15 @@ public class ExpenseActivity extends AppCompatActivity {
                             } else if (expenseType == "Deposit") {
                                 userCurrentAmount = userCurrentAmount - expenseAmount;
                             }
-                            expenseTypeRef.child("currentBalance").setValue(userCurrentAmount);
-                            currentBalance.setText(userCurrentAmount.toString());
+                            expenseTypeRef.child("currentBalance").setValue(userCurrentAmount).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    currentBalance.setText(userCurrentAmount.toString());
+                                    myUtils.hideLoading();
+                                }
+                            });
                             expensesRef.child(exp.getId()).removeValue();
-                            Toast.makeText(ExpenseActivity.this, "Expense Deleted", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ExpenseActivity.this, "Expense Deleted Successfully", Toast.LENGTH_LONG).show();
                         } catch (Exception err) {
                             Toast.makeText(ExpenseActivity.this, "Unable to delete expense", Toast.LENGTH_SHORT).show();
                             Log.i("deleteEx", err.toString());
