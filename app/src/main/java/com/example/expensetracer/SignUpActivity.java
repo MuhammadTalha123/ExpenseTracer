@@ -115,8 +115,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         mAuth.signOut();
                                         myUtils.hideLoading();
                                         Toast.makeText(SignUpActivity.this, R.string.toast_signup_success, Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
-                                            startActivity(intent);
+                                        Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
+                                        startActivity(intent);
                                     }
                                 }
                             }
