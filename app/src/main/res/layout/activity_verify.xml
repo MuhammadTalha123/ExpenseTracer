@@ -27,7 +27,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/edittext_background"
-        android:text="send email verify link"
+        android:text="send email verification again"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

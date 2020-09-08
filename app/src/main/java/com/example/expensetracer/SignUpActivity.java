@@ -30,6 +30,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     Button signUpBtn, cancelBtn;
     ProgressBar progressBar;
     FirebaseUser firebaseUser;
+    Utils myUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_up);
 
         getSupportActionBar().setTitle(R.string.app_name_signUp);
+        myUtils = Utils.getInstance();
         loadAllViews();
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,17 +75,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             } else if (password.length() < 6) {
                 Toast.makeText(SignUpActivity.this, R.string.toast_signup_empty_values, Toast.LENGTH_LONG).show();
             } else {
-                final ProgressDialog progressDialog = new ProgressDialog(this);
-                progressDialog.setMax(100);
-                // Setting Title
-                progressDialog.setTitle("ProgressDialog");
-                // Setting Message
-                progressDialog.setMessage("Loading...");
-                // Progress Dialog Style Horizontal
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                // Progress Dialog Style Spinner
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
+                myUtils.showLoading(this);
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -121,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         user.setBalance(0);
                                         mDatabase.getReference().child("users").child(userId).setValue(user);
                                         mAuth.signOut();
-                                        progressDialog.dismiss();
+                                        myUtils.hideLoading();
                                         Toast.makeText(SignUpActivity.this, R.string.toast_signup_success, Toast.LENGTH_LONG).show();
                                             Intent intent = new Intent(SignUpActivity.this, VerifyActivity.class);
                                             startActivity(intent);

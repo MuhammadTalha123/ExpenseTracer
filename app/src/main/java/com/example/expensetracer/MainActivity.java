@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Log.w("test", "signInWithEmail:failed", task.getException());
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.INVISIBLE);
+                                    myUtils.hideLoading();
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                                     startActivity(intent);
