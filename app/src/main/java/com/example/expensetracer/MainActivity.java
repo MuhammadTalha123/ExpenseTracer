@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     FirebaseUser user;
+    Utils myUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        myUtils = Utils.getInstance();
 
 
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
     @Override
     public void onClick(View v) {
 
@@ -131,18 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.INVISIBLE);
             } else {
-                final ProgressDialog progressDialog = new ProgressDialog(this);
-                progressDialog.setMax(100);
-                // Setting Title
-                progressDialog.setTitle("ProgressDialog");
-                // Setting Message
-                progressDialog.setMessage("Loading...");
-                // Progress Dialog Style Horizontal
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                // Progress Dialog Style Spinner
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
+
                 progressBar.setVisibility(View.VISIBLE);
+                myUtils.showLoading(this);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -152,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Log.w("test", "signInWithEmail:failed", task.getException());
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.INVISIBLE);
-                                    progressDialog.dismiss();
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                                     startActivity(intent);
