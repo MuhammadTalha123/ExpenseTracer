@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="@android:color/white"
+        android:textColor="#222831"
         android:id="@+id/textView"
         android:textSize="18sp"
         android:textStyle="bold"/>
@@ -59,7 +59,7 @@
         android:layout_marginTop="10dp"
         android:id="@+id/textView2"
         android:layout_below="@+id/emailField"
-        android:textColor="@android:color/white"
+        android:textColor="#222831"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textSize="18sp"
@@ -104,7 +104,7 @@
         android:layout_marginTop="38dp"
         android:text="Forgot Password?"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
+        android:textColor="#222831"
         android:textSize="14sp" />
 
 </RelativeLayout>
