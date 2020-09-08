@@ -18,6 +18,7 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
     int mResource;
     List<Expense> mObjects;
     DecimalFormat df = new DecimalFormat("###.#");
+
     public ExpenseAdapter(Context context, int resource, List<Expense> objects) {
         super(context, resource, objects);
         mContext = context;
@@ -29,20 +30,28 @@ public class ExpenseAdapter extends ArrayAdapter<Expense> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(mResource,parent,false);
+            convertView = inflater.inflate(mResource, parent, false);
             holder = new ViewHolder();
             holder.nameText = (TextView) convertView.findViewById(R.id.expName);
             holder.amountText = (TextView) convertView.findViewById(R.id.expVal);
             convertView.setTag(holder);
-        }
-        else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         Expense exp = mObjects.get(position);
         holder.nameText.setText(exp.getName());
-        holder.amountText.setText(String.valueOf(df.format(exp.getAmount())));
+        String expType = exp.getExpenseType();
+        int expAmount = 0;
+        String expAmountString = "";
+        expAmount = exp.getAmount();
+        if (expType == "Credit") {
+            expAmountString = "-" + String.valueOf(expAmount);
+        } else {
+            expAmountString = "+" + String.valueOf(expAmount);
+        }
+        holder.amountText.setText(expAmountString);
         return convertView;
     }
 }
