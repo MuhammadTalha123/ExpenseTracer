@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView emailField, passwordField, forgotTextLink;
     Button loginBtn, signBtn;
     FirebaseAuth mAuth;
-    ProgressBar progressBar;
     FirebaseUser user;
     Utils myUtils;
 
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loginBtn.setOnClickListener(this);
         signBtn = (Button) findViewById(R.id.signUpBtn);
         signBtn.setOnClickListener(this);
-        progressBar = findViewById(R.id.progress_circular);
 
 
     }
@@ -133,10 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String password = passwordField.getText().toString().trim();
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(MainActivity.this, R.string.toast_empty_values, Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.INVISIBLE);
             } else {
 
-                progressBar.setVisibility(View.VISIBLE);
                 myUtils.showLoading(this);
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -146,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (!task.isSuccessful()) {
                                     Log.w("test", "signInWithEmail:failed", task.getException());
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
-                                    progressBar.setVisibility(View.INVISIBLE);
                                     myUtils.hideLoading();
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);

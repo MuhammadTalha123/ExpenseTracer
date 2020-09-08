@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,11 +14,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,17 +24,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
-
 import java.io.ByteArrayOutputStream;
-import java.net.URL;
 import java.util.UUID;
 
 public class PaintingActivity extends AppCompatActivity {
 
 
     DrawingView drawingView;
-    Button saveImageBtn, image_from_gallery, camera;
+    Button saveImageBtn, image_from_gallery, camera, cancelBtn;
     StorageReference storageReference;
     FirebaseAuth mAuth;
     DatabaseReference ref;
@@ -56,6 +48,7 @@ public class PaintingActivity extends AppCompatActivity {
 
 
         camera = findViewById(R.id.camera);
+        cancelBtn = findViewById(R.id.cancelBtn);
         ref = FirebaseDatabase.getInstance().getReference();
         saveImageBtn = findViewById(R.id.saveimage_btn);
         image_from_gallery = findViewById(R.id.image_from_gallery);
@@ -69,6 +62,18 @@ public class PaintingActivity extends AppCompatActivity {
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
+
+        //cancel button
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(),ViewExpenseActivity.class));
+                Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
+                Expense currentExpense = myStore.getCurrentExpense();
+                myExpenseIntent.putExtra("expense", currentExpense);
+                startActivity(myExpenseIntent);
+            }
+        });
 
 
         // open camera mobile phone
