@@ -23,6 +23,33 @@
         android:gravity="center"
         android:orientation="horizontal">
 
+
+        <Button
+            android:id="@+id/saveimage_btn"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_background"
+            android:text="save Image"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_background"
+            android:onClick="clearCanvas"
+            android:text="Clear Canvas"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/camera"
             android:layout_width="110dp"
@@ -41,32 +68,6 @@
             android:background="@drawable/edittext_background"
             android:onClick="clearCanvas"
             android:text="From Gallery"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/edittext_background"
-            android:onClick="clearCanvas"
-            android:text="Clear Canvas"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/saveimage_btn"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/edittext_background"
-            android:text="save Image"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
