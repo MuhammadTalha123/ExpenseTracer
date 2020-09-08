@@ -66,6 +66,9 @@ public class PaintingActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
 
+
+
+
         //cancel button
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +97,7 @@ public class PaintingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(openGalleryIntent, 1000);
+
 
             }
         });
