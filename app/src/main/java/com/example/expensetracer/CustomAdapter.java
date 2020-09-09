@@ -135,17 +135,17 @@ public class CustomAdapter implements ListAdapter {
                                 Log.i("deleteImage", err.toString());
                             }
 
-
-                            String file_dj_path = Environment.getExternalStorageDirectory() + "/Pictures/" + imageId + ".jpg";
-                            File fdelete = new File(file_dj_path);
-                            if (fdelete.exists()) {
-                                if (fdelete.delete()) {
-                                    Log.e("-->", "file Deleted :" + file_dj_path);
-//                            callBroadCast();
-                                } else {
-                                    Log.e("-->", "file not Deleted :" + file_dj_path);
-                                }
-                            }
+                            // Deleting Drawing image from gallery
+//                            String file_dj_path = Environment.getExternalStorageDirectory() + "/Pictures/" + imageId + ".jpg";
+//                            File fileToDelete = new File(file_dj_path);
+//                            if (fileToDelete.exists()) {
+//                                if (fileToDelete.delete()) {
+//                                    Log.e("-->", "file Deleted :" + file_dj_path);
+////                            callBroadCast();
+//                                } else {
+//                                    Log.e("-->", "file not Deleted :" + file_dj_path);
+//                                }
+//                            }
 
 
                         }
