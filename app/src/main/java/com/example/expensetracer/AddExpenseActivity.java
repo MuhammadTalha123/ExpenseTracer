@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,8 +42,9 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     DatabaseReference expensesRef;
     DatabaseReference userRef;
     private FirebaseAuth mAuth;
-    String[] expenseImages = {};
-    TextView currentBalanceTextView;
+    Utils myUtils;
+    Integer expenseAmt;
+    String expenseType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,9 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         expenseTypeSelector.setAdapter(adapter);
         ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        myUtils = Utils.getInstance();
+        expenseAmt = 0;
+        expenseType = "";
         getSupportActionBar().setTitle(R.string.app_name_Add);
         loadAllViews();
         String uid = mAuth.getCurrentUser().getUid();
@@ -105,21 +110,27 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
         boolean isCancelButton = view.getId() == R.id.cancelBtn;
         if (isAddButton) {
             String expenseName = expNameField.getText().toString();
-            Integer expenseAmt = Integer.parseInt(expAmountField.getText().toString());
+            expenseAmt = Integer.parseInt(expAmountField.getText().toString());
             if (expenseName == "") {
                 Toast.makeText(AddExpenseActivity.this, "Enter Expense Name", Toast.LENGTH_LONG).show();
             } else if (expenseAmt <= 0) {
             } else if (expenseAmt <= 0) {
                 Toast.makeText(AddExpenseActivity.this, "Enter Expense Amount", Toast.LENGTH_LONG).show();
             } else if (expenseName != "" && expenseAmt > 0 && catValue != -1) {
+                myUtils.showLoading(this);
                 String dtVal = String.valueOf(android.text.format.DateFormat.format("MM/dd/yyyy", new java.util.Date()));
                 String key = expensesRef.push().getKey();
-                String expenseType = expenseTypeSelector.getSelectedItem().toString();
+                expenseType = expenseTypeSelector.getSelectedItem().toString();
                 List<String> myImagesCurrent = new ArrayList<>();
                 Expense thisExpense = new Expense(expenseName, catValue, expenseAmt, dtVal, key, myImagesCurrent, expenseType);
-                expensesRef.child(key).setValue(thisExpense);
-                updateUserBalance(expenseAmt, expenseType);
-                finish();
+                expensesRef.child(key).setValue(thisExpense).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        myUtils.hideLoading();
+                        updateUserBalance(expenseAmt, expenseType);
+                        finish();
+                    }
+                });
             }
         } else if (isCancelButton) {
             finish();

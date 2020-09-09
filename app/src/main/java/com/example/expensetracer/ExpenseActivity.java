@@ -168,7 +168,7 @@ public class ExpenseActivity extends AppCompatActivity {
                                 }
                             });
                             expensesRef.child(exp.getId()).removeValue();
-                            Toast.makeText(ExpenseActivity.this, "Expense Deleted Successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ExpenseActivity.this, "Expense Deleted Successfully", Toast.LENGTH_SHORT).show();
                         } catch (Exception err) {
                             Toast.makeText(ExpenseActivity.this, "Unable to delete expense", Toast.LENGTH_SHORT).show();
                             Log.i("deleteEx", err.toString());
