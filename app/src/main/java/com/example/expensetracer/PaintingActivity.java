@@ -43,13 +43,12 @@ public class PaintingActivity extends AppCompatActivity {
     String uid;
     String expenseId;
     String imageId;
+    Utils myUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_painting);
-
-
         camera = findViewById(R.id.camera);
         cancelBtn = findViewById(R.id.cancelBtn);
         ref = FirebaseDatabase.getInstance().getReference();
@@ -57,17 +56,13 @@ public class PaintingActivity extends AppCompatActivity {
         image_from_gallery = findViewById(R.id.image_from_gallery);
         drawingView = findViewById(R.id.myDrawing);
         mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
         uid = mAuth.getCurrentUser().getUid();
         expenseId = getIntent().getStringExtra("EXPENSE_ID");
         imageId = UUID.randomUUID().toString();
-        ;
+        myUtils = Utils.getInstance();
         expenseRef = ref.child("users").child(uid).child("expenses").child(expenseId);
         storageReference = FirebaseStorage.getInstance().getReference();
         myStore = Storage.getInstance();
-
-
-
 
         //cancel button
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +108,7 @@ public class PaintingActivity extends AppCompatActivity {
                 saveDialog.setPositiveButton("yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        myUtils.showLoading(PaintingActivity.this);
 
                         drawingView.setDrawingCacheEnabled(true);
                         String imgSaved = MediaStore.Images.Media.insertImage(
@@ -131,15 +127,9 @@ public class PaintingActivity extends AppCompatActivity {
                         drawingView.destroyDrawingCache();
 
                         uploadImageToFirebase(imgSaved);
-                        Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
-                        Expense currentExpense = myStore.getCurrentExpense();
-                        myExpenseIntent.putExtra("expense", currentExpense);
-                        startActivity(myExpenseIntent);
                     }
 
                     public void uploadImageToFirebase(String imgSaved) {
-
-
                         // upload image to firebase storage
                         final StorageReference fileRef = storageReference.child(uid).child(expenseId).child(imageId);
                         fileRef.putFile(Uri.parse(imgSaved)).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -148,7 +138,14 @@ public class PaintingActivity extends AppCompatActivity {
                                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        expenseRef.child("images").child(imageId).setValue(uri.toString());
+                                        expenseRef.child("images").child(imageId).setValue(uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                myUtils.hideLoading();
+                                                openViewExpenseActivity();
+                                                Toast.makeText(PaintingActivity.this, "Drawing Upload Successfully", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -188,37 +185,36 @@ public class PaintingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
             if (resultCode == Activity.RESULT_OK) {
+                myUtils.showLoading(PaintingActivity.this);
                 Uri imageURi = data.getData();
                 uploadToFirebase(imageURi);
             }
-            return;
-        }
+        } else if (requestCode == 0) {
 
-
-        try {
-            if (requestCode == 0) {
+            try {
                 if (resultCode == Activity.RESULT_OK) {
-
+                    myUtils.showLoading(PaintingActivity.this);
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                     String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
                     Uri capturedImageUri = Uri.parse(path);
                     uploadToFirebaseCameraImage(capturedImageUri);
                 }
+            } catch (Exception err) {
+                Toast.makeText(this, "Your Error" + err.toString(), Toast.LENGTH_LONG).show();
+                Log.i("error", err.toString());
             }
-        } catch (Exception err) {
-            Toast.makeText(this, "Your Error" + err.toString(), Toast.LENGTH_LONG).show();
-            Log.i("error", err.toString());
         }
 
 
+    }
+
+    private void openViewExpenseActivity(){
         Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
         Expense currentExpense = myStore.getCurrentExpense();
         myExpenseIntent.putExtra("expense", currentExpense);
         startActivity(myExpenseIntent);
-
     }
 
     private void uploadToFirebaseCameraImage(Uri capturedImageUri) {
@@ -229,8 +225,14 @@ public class PaintingActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        expenseRef.child("images").child(imageId).setValue(uri.toString());
-                        Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                        expenseRef.child("images").child(imageId).setValue(uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                myUtils.hideLoading();
+                                openViewExpenseActivity();
+                                Toast.makeText(PaintingActivity.this, "Camera Image Uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
             }
@@ -238,6 +240,7 @@ public class PaintingActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(PaintingActivity.this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
+                myUtils.hideLoading();
             }
         });
     }
@@ -251,8 +254,14 @@ public class PaintingActivity extends AppCompatActivity {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        expenseRef.child("images").child(imageId).setValue(uri.toString());
-                        Toast.makeText(PaintingActivity.this, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                        expenseRef.child("images").child(imageId).setValue(uri.toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                myUtils.hideLoading();
+                                openViewExpenseActivity();
+                                Toast.makeText(PaintingActivity.this, "Gallery Image Uploaded", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
             }
@@ -260,6 +269,7 @@ public class PaintingActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(PaintingActivity.this, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
+                myUtils.hideLoading();
             }
         });
 
