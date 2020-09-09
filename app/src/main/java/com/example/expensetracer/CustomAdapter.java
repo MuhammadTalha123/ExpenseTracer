@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,8 +35,9 @@ public class CustomAdapter implements ListAdapter {
     StorageReference imageFireStoreRef;
 
     DatabaseReference imageFirebaseDBReg;
-    String userId;
     Storage myStore;
+    Utils myUtils;
+
 
     public CustomAdapter(Context context, ArrayList<String> arrayList) {
         this.arrayList = arrayList;
@@ -43,6 +45,7 @@ public class CustomAdapter implements ListAdapter {
         this.myStore = Storage.getInstance();
         this.imageFireStoreRef = FirebaseStorage.getInstance().getReference();
         this.imageFirebaseDBReg = FirebaseDatabase.getInstance().getReference();
+        this.myUtils = Utils.getInstance();
     }
 
     @Override
@@ -117,6 +120,7 @@ public class CustomAdapter implements ListAdapter {
                     delImage.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            myUtils.showLoading(context);
                             // Get user id
                             // get expense id
                             // Get image id
@@ -127,9 +131,14 @@ public class CustomAdapter implements ListAdapter {
 
                             try {
                                 imageFireStoreRef.child(userId).child(expenseId).child(imageId).delete();
-                                imageFirebaseDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue();
-                                Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
-                                image.setVisibility(View.GONE);
+                                imageFirebaseDBReg.child("users").child(userId).child("expenses").child(expenseId).child("images").child(imageId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        myUtils.hideLoading();
+                                        Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
+                                        image.setVisibility(View.GONE);
+                                    }
+                                });
                             } catch (Exception err) {
                                 Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
                                 Log.i("deleteImage", err.toString());
