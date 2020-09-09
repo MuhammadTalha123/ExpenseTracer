@@ -197,13 +197,14 @@ public class PaintingActivity extends AppCompatActivity {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                    String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
+                    String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),bitmap, "Title", null);
                     Uri capturedImageUri = Uri.parse(path);
                     uploadToFirebaseCameraImage(capturedImageUri);
                 }
             } catch (Exception err) {
                 Toast.makeText(this, "Your Error" + err.toString(), Toast.LENGTH_LONG).show();
                 Log.i("error", err.toString());
+                myUtils.hideLoading();
             }
         }
 

@@ -2,6 +2,7 @@ package com.example.expensetracer;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Environment;
@@ -95,20 +96,23 @@ public class CustomAdapter implements ListAdapter {
         if (view == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             view = layoutInflater.inflate(R.layout.activity_list_item, null);
+            final ImageView image = view.findViewById(R.id.image);
+            Picasso.get()
+                    .load(subjectData)
+                    .into(image);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Get user id
                     // get expense id
                     // Get image id
-
+                    Intent intent= new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("imageUri",subjectData);
+                    context.startActivity(intent);
                 }
             });
 
-            final ImageView image = view.findViewById(R.id.image);
-            Picasso.get()
-                    .load(subjectData)
-                    .into(image);
 
             view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
