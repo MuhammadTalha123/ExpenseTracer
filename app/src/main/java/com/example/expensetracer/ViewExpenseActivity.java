@@ -57,10 +57,14 @@ public class ViewExpenseActivity extends AppCompatActivity {
         loadAllViews();
         imagesHashMap = new HashMap<String, String>();
         String uid = myStore.getUserId();
-        expense = (Expense) getIntent().getExtras().get("expense");
+        expense = myStore.getCurrentExpense();
         String expenseId = myStore.getExpenseId();
-        imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
-        getImages(imagesRef);
+        try {
+            imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
+            getImages(imagesRef);
+        } catch (Exception err) {
+            Log.i("delImage", err.toString());
+        }
     }
 
     @Override
@@ -80,7 +84,7 @@ public class ViewExpenseActivity extends AppCompatActivity {
     }
 
     public void loadAllViews() {
-        expense = (Expense) getIntent().getExtras().get("expense");
+        expense = myStore.getCurrentExpense();
         closeBtn = (Button) findViewById(R.id.closeBtn);
         imgList = (ListView) findViewById(R.id.imgList);
 

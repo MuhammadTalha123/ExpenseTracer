@@ -9,13 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 public class ShowImageActivity extends AppCompatActivity {
     ImageView show_image;
-    Button cancelBtn;
+    private Button cancelBtn, deleteBtn;
     Storage myStore;
+    String imageUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class ShowImageActivity extends AppCompatActivity {
         myStore = Storage.getInstance();
         try {
             Bundle bundle = getIntent().getExtras();
-            String imageUrl = bundle.get("imageUri").toString();
+            imageUrl = bundle.get("imageUri").toString();
             Picasso.get().load(imageUrl).into(show_image);
         } catch (Exception imageError) {
             Log.i("imageError", imageError.toString());
@@ -41,6 +43,9 @@ public class ShowImageActivity extends AppCompatActivity {
                 startActivity(myExpenseIntent);
             }
         });
+
+
+
 
 
     }
