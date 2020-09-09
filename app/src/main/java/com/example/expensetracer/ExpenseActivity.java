@@ -28,8 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ExpenseActivity extends AppCompatActivity {
 
@@ -45,9 +49,12 @@ public class ExpenseActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     TextView currentBalance;
     Integer userCurrentAmount;
+    HashMap<String, String> imagesHashMap;
+    DatabaseReference imagesRef;
     final static String[] categories = {"Groceries", "Invoice", "Transportation", "Shopping", "Rent", "Trips", "Utilities", "Other"};
     Storage myStore;
     Utils myUtils;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,10 @@ public class ExpenseActivity extends AppCompatActivity {
         myStore = Storage.getInstance();
         mAuth = FirebaseAuth.getInstance();
         myUtils = Utils.getInstance();
+        imagesHashMap = new HashMap<String, String>();
         uid = mAuth.getCurrentUser().getUid();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference = storageReference.child(uid);
         userCurrentAmount = 0;
         FirebaseUser user = mAuth.getCurrentUser();
         expenseTypeRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
@@ -114,9 +124,9 @@ public class ExpenseActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     expenses.clear();
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Expense exps = ds.getValue(Expense.class);
-                        exps.setId(ds.getKey());
-                        expenses.add(exps);
+                        Expense exp = ds.getValue(Expense.class);
+                        exp.setId(ds.getKey());
+                        expenses.add(exp);
                     }
                     showExpenseTable();
                 }
@@ -155,6 +165,9 @@ public class ExpenseActivity extends AppCompatActivity {
                             Expense exp = expenses.get(position);
                             String expenseType = exp.getExpenseType();
                             Integer expenseAmount = exp.getAmount();
+                            final String expenseId = exp.getExpenseId();
+                            imagesRef = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("expenses").child(expenseId).child("images");
+                            deleteAllExpenseImages(imagesRef, expenseId);
                             if (expenseType == "Credit") {
                                 userCurrentAmount = userCurrentAmount + expenseAmount;
                             } else if (expenseType == "Deposit") {
@@ -164,10 +177,10 @@ public class ExpenseActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     currentBalance.setText(userCurrentAmount.toString());
+                                    expensesRef.child(expenseId).removeValue();
                                     myUtils.hideLoading();
                                 }
                             });
-                            expensesRef.child(exp.getId()).removeValue();
                             Toast.makeText(ExpenseActivity.this, "Expense Deleted Successfully", Toast.LENGTH_SHORT).show();
                         } catch (Exception err) {
                             Toast.makeText(ExpenseActivity.this, "Unable to delete expense", Toast.LENGTH_SHORT).show();
@@ -218,5 +231,39 @@ public class ExpenseActivity extends AppCompatActivity {
             ExpenseAdapter adapter = new ExpenseAdapter(ExpenseActivity.this, R.layout.roww_layout, expenses);
             expList.setAdapter(adapter);
         }
+    }
+
+    private void deleteAllExpenseImages(DatabaseReference imagesRef, final String expenseId) {
+        imagesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean hasImages = dataSnapshot.exists();
+                imagesHashMap.clear();
+                if (hasImages) {
+                    try {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            String data = ds.getValue(String.class);
+                            imagesHashMap.put(ds.getKey(), data);
+                            removeImageFromStore(expenseId, ds.getKey());
+                        }
+
+                        Log.i("imagesHashMap", imagesHashMap.toString());
+
+                    } catch (Exception err) {
+                        Log.i("imgTest0", err.toString());
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("labelError", databaseError.toString());
+            }
+        });
+    }
+
+    private void removeImageFromStore(String expenseId, String imageId) {
+        storageReference.child(expenseId).child(imageId).delete();
     }
 }

@@ -76,7 +76,7 @@ public class Expense implements Serializable {
     }
 
     public List<String> getExpenseImages() {
-        return expenseImages;
+        return this.expenseImages;
     }
 
     public void setcDate(String cDate) {
