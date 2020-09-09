@@ -107,7 +107,6 @@ public class CustomAdapter implements ListAdapter {
                     // Get user id
                     // get expense id
                     // Get image id
-                    Toast.makeText(context, "Image Clicked", Toast.LENGTH_SHORT).show();
                     Intent intent= new Intent(context, ShowImageActivity.class);
                     intent.putExtra("imageUri",subjectData);
                     context.startActivity(intent);
