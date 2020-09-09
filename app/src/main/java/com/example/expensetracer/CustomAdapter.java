@@ -135,7 +135,7 @@ public class CustomAdapter implements ListAdapter {
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         myUtils.hideLoading();
-                                        Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "Image Deleted Successfully", Toast.LENGTH_SHORT).show();
                                         image.setVisibility(View.GONE);
                                     }
                                 });
