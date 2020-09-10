@@ -200,7 +200,7 @@
         android:text="No Image"
         android:textAlignment="center"
         android:textColor="#393e46"
-        android:textSize="23sp"
+        android:textSize="18sp"
         android:visibility="invisible" />
 
     <ListView

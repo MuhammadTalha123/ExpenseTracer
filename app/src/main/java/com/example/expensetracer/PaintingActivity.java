@@ -122,11 +122,15 @@ public class PaintingActivity extends AppCompatActivity {
                             Toast unsavedToast = Toast.makeText(getApplicationContext(),
                                     "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
                             unsavedToast.show();
+                            myUtils.hideLoading();
                         }
                         // Destroy the current cache.
                         drawingView.destroyDrawingCache();
-
-                        uploadImageToFirebase(imgSaved);
+                        try {
+                            uploadImageToFirebase(imgSaved);
+                        } catch (Exception ImageError) {
+                            Log.i("ImageError",ImageError.toString());
+                        }
                     }
 
                     public void uploadImageToFirebase(String imgSaved) {
@@ -197,7 +201,7 @@ public class PaintingActivity extends AppCompatActivity {
                     Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                    String path = MediaStore.Images.Media.insertImage(this.getContentResolver(),bitmap, "Title", null);
+                    String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "Title", null);
                     Uri capturedImageUri = Uri.parse(path);
                     uploadToFirebaseCameraImage(capturedImageUri);
                 }
@@ -211,7 +215,7 @@ public class PaintingActivity extends AppCompatActivity {
 
     }
 
-    private void openViewExpenseActivity(){
+    private void openViewExpenseActivity() {
         Intent myExpenseIntent = new Intent(getApplicationContext(), ViewExpenseActivity.class);
         Expense currentExpense = myStore.getCurrentExpense();
         myExpenseIntent.putExtra("expense", currentExpense);
