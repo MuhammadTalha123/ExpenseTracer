@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView emailField, passwordField, forgotTextLink;
     Button loginBtn, signBtn;
     FirebaseAuth mAuth;
-    FirebaseUser user;
     Utils myUtils;
 
     @Override
@@ -43,8 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         forgotTextLink = (TextView) findViewById(R.id.forgotTextLink);
 
         mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-
         myUtils = Utils.getInstance();
 
 
@@ -144,8 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Toast.makeText(MainActivity.this, R.string.toast_loginFailed, Toast.LENGTH_LONG).show();
                                     myUtils.hideLoading();
                                 } else {
-                                    Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
-                                    startActivity(intent);
+                                    if (mAuth.getCurrentUser().isEmailVerified()){
+                                        Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(MainActivity.this, "Please Verified Your Email", Toast.LENGTH_SHORT).show();
+                                        myUtils.hideLoading();
+                                    }
                                 }
                             }
                         });
