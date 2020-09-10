@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
-
-import org.xml.sax.helpers.AttributeListImpl;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class CustomAdapter implements ListAdapter {
@@ -107,8 +98,8 @@ public class CustomAdapter implements ListAdapter {
                     // Get user id
                     // get expense id
                     // Get image id
-                    Intent intent= new Intent(context, ShowImageActivity.class);
-                    intent.putExtra("imageUri",subjectData);
+                    Intent intent = new Intent(context, ShowImageActivity.class);
+                    intent.putExtra("imageUri", subjectData);
                     context.startActivity(intent);
                 }
             });
@@ -145,7 +136,6 @@ public class CustomAdapter implements ListAdapter {
                                 });
                             } catch (Exception err) {
                                 Toast.makeText(context, "Unable to delete image", Toast.LENGTH_SHORT).show();
-                                Log.i("deleteImage", err.toString());
                             }
 
                             // Deleting Drawing image from gallery
