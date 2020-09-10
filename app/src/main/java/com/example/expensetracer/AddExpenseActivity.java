@@ -1,9 +1,7 @@
 package com.example.expensetracer;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +32,6 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
     TextView expNameField, expAmountField;
     Spinner expCategoryField;
     Spinner expenseTypeSelector;
-
     Button addBtn, cancelBtn;
     int catValue = -1;
     DatabaseReference ref;
@@ -148,21 +144,17 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
                         String currentBalance = dataSnapshot.child("currentBalance").getValue().toString();
                         Integer currentBalanceInt = Integer.parseInt(currentBalance);
                         Integer myAmount = expenseAmt;
-                        if(expenseType == "Deposit" && myAmount != 0)
-                        {
+                        if (expenseType == "Deposit" && myAmount != 0) {
                             currentBalanceInt = currentBalanceInt + myAmount;
                             userRef.child("currentBalance").setValue(currentBalanceInt);
                             expAmountField.setText(0);
                             myAmount = 0;
-                        } else if(expenseType == "Credit" && myAmount != 0){
+                        } else if (expenseType == "Credit" && myAmount != 0) {
                             currentBalanceInt = currentBalanceInt - myAmount;
                             userRef.child("currentBalance").setValue(currentBalanceInt);
                             expAmountField.setText(0);
                             myAmount = 0;
                         }
-                        Log.i("imgTest0", currentBalance.toString());
-
-//                        Integer currentBalance = user
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
@@ -173,7 +165,6 @@ public class AddExpenseActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i("labelError", databaseError.toString());
             }
         });
     }

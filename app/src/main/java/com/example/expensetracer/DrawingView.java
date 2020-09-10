@@ -16,13 +16,13 @@ public class DrawingView extends View {
 
 
     Context context;
-    int width,height;
+    int width, height;
     Bitmap bitmap;
     Path path;
     Paint paint;
     Canvas canvas;
-    float mX,mY;
-    static final float TOLERANCE=4;
+    float mX, mY;
+    static final float TOLERANCE = 4;
 
     public DrawingView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -39,32 +39,30 @@ public class DrawingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        bitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
     }
 
 
-
-    public void startTouch(float x,float y){
+    public void startTouch(float x, float y) {
 
         path.moveTo(x, y);
         mX = x;
         mY = y;
     }
 
-    public void moveTouch(float x,float y){
+    public void moveTouch(float x, float y) {
 
-        float dx = Math.abs(x-mX);
-        float dy = Math.abs(y-mY);
+        float dx = Math.abs(x - mX);
+        float dy = Math.abs(y - mY);
 
-        if (dx>=TOLERANCE || dy>=TOLERANCE) {
-            path.quadTo(mX,mY,(x+mX)/2 , (y+mY)/2);
+        if (dx >= TOLERANCE || dy >= TOLERANCE) {
+            path.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
             mX = x;
             mY = y;
         }
 
     }
-
 
 
     //to clear the canvas
@@ -75,15 +73,14 @@ public class DrawingView extends View {
     }
 
     public void upTouch() {
-        path.lineTo(mX,mY);
+        path.lineTo(mX, mY);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawPath(path,paint);
+        canvas.drawPath(path, paint);
     }
-
 
 
     @Override
@@ -92,11 +89,11 @@ public class DrawingView extends View {
         float y = event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                startTouch(x,y);
+                startTouch(x, y);
                 invalidate();
                 break;
             case MotionEvent.ACTION_MOVE:
-                moveTouch(x,y);
+                moveTouch(x, y);
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:

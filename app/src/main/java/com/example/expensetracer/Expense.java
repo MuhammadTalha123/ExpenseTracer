@@ -1,7 +1,5 @@
 package com.example.expensetracer;
 
-import android.widget.ListAdapter;
-
 import java.io.Serializable;
 import java.util.List;
 

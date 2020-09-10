@@ -2,17 +2,13 @@ package com.example.expensetracer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -79,9 +75,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.d("test", "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(SignUpActivity.this, R.string.toast_signup_error, Toast.LENGTH_LONG).show();
                                     myUtils.hideLoading();
@@ -96,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.d("TAG", "onFailure: Email not Sent " + e.getMessage());
                                         }
                                     });
 

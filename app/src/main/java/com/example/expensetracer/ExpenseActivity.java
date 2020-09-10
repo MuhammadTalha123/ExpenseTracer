@@ -3,7 +3,6 @@ package com.example.expensetracer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,10 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ExpenseActivity extends AppCompatActivity {
 
@@ -246,9 +242,6 @@ public class ExpenseActivity extends AppCompatActivity {
                             imagesHashMap.put(ds.getKey(), data);
                             removeImageFromStore(expenseId, ds.getKey());
                         }
-
-                        Log.i("imagesHashMap", imagesHashMap.toString());
-
                     } catch (Exception err) {
                         Log.i("imgTest0", err.toString());
                     }
@@ -258,7 +251,6 @@ public class ExpenseActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i("labelError", databaseError.toString());
             }
         });
     }
