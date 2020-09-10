@@ -37,36 +37,36 @@ public class VerifyActivity extends AppCompatActivity {
             }
         });
 
-        resendCode = (Button) findViewById(R.id.resendCode);
+//        resendCode = (Button) findViewById(R.id.resendCode);
 
         final FirebaseUser user = mAuth.getCurrentUser();
 
-
-        try {
-
-            resendCode.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(VerifyActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("tag", "onFailure: Email not sent " + e.getMessage());
-                            Toast.makeText(VerifyActivity.this, "Email Not Sent"
-                                    , Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
-
-        } catch (Exception err) {
-            Toast.makeText(this, "Email Already Send", Toast.LENGTH_SHORT).show();
-        }
+//
+//        try {
+//
+//            resendCode.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Toast.makeText(VerifyActivity.this, "Verification Email Has Been Sent.", Toast.LENGTH_SHORT).show();
+//                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.d("tag", "onFailure: Email not sent " + e.getMessage());
+//                            Toast.makeText(VerifyActivity.this, "Email Not Sent"
+//                                    , Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//            });
+//
+//        } catch (Exception err) {
+//            Toast.makeText(this, "Email Already Send", Toast.LENGTH_SHORT).show();
+//        }
 
 
     }
