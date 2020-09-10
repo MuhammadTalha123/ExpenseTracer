@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         Intent intent = new Intent(MainActivity.this, ExpenseActivity.class);
                                         startActivity(intent);
                                     } else {
-                                        Toast.makeText(MainActivity.this, "Please Verified Your Email", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, "Please Verify Your Email First", Toast.LENGTH_SHORT).show();
                                         myUtils.hideLoading();
                                     }
                                 }
